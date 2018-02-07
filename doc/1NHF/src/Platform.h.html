@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>C++ code colored by C++2HTML</title>
+<meta name="generator" content="C++2HTML by Jasper Bedaux">
+<!-- To generate your own colored code visit http://www.bedaux.net/cpp2html/ -->
+<style type="text/css">
+.comment { color: #999999; font-style: italic; }
+.pre { color: #000099; }
+.string { color: #009900; }
+.char { color: #009900; }
+.float { color: #996600; }
+.int { color: #999900; }
+.bool { color: #000000; font-weight: bold; }
+.type { color: #FF6633; }
+.flow { color: #FF0000; }
+.keyword { color: #990000; }
+.operator { color: #663300; font-weight: bold; }
+.operator { color: #663300; font-weight: bold; }
+</style>
+</head>
+<body>
+<pre><span class="comment">
+/** * * * BME-VIK-MI_2011_10_17 * * *|1.NHF|* * * * * * * * * *\
+*    _ _____   _____        __ _                              *
+*   (_)  __ \ / ____|      / _| |                             *
+*   |_| |__)| (___    ___ | |_| |___      ____ _ _ __ ___     *
+*   | |  _  / \___ \ / _ \|  _| __\ \ /\ / / _` | '__/ _ \    *
+*   | | | \ \ ____) | (_) | | | |_ \ V  V / (_| | | |  __/    *
+*   |_|_|  \_\_____/ \___/|_|  \__| \_/\_/ \__,_|_|  \___|    *
+*                                                             *
+*                   http://irsoftware.co.cc                   *
+*                                                             *
+*              contact_adress: sk8Geri@gmail.com               *
+*                                                               *
+*       This file is a part of the work done by aFagylaltos.     *
+*         You are free to use the code in any way you like,      *
+*         modified, unmodified or copied into your own work.     *
+*        However, I would like you to consider the following:    *
+*                                                               *
+*  -If you use this file and its contents unmodified,         *
+*              or use a major part of this file,               *
+*     please credit the author and leave this note untouched.   *
+*  -If you want to use anything in this file commercially,      *
+*                please request my approval.                    *
+*                                                              *
+\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */</span><span class="pre">
+
+#ifndef _PLATFORM_H_
+#define _PLATFORM_H_
+
+#include &lt;stdio.h&gt;
+
+#include &lt;allegro5/allegro.h&gt;
+#include &lt;allegro5/allegro_image.h&gt;
+#include &lt;allegro5/allegro_font.h&gt;
+#include &lt;allegro5/allegro_audio.h&gt;
+#include &lt;allegro5/allegro_acodec.h&gt;
+
+#if defined(_WIN32)
+</span><span class="comment">//#   include &lt;windows.h&gt;
+</span><span class="pre">#elif defined(LINUX)
+#   include &lt;stdio.h&gt;
+#   include &lt;gtk/gtk.h&gt;
+#elif defined(__APPLE__)
+#include &lt;CoreServices/CoreServices.h&gt;
+#include &lt;ApplicationServices/ApplicationServices.h&gt;
+#include &lt;Carbon/Carbon.h&gt;
+#endif
+
+
+
+#define GAME_PATH "../base/"
+#define MAX_ANIMS 10
+</span><span class="keyword">
+enum</span><span class="operator"> {</span>SUCCES<span class="operator">,</span>FAIL<span class="operator">};</span><span class="comment">
+
+/*
+typedef unsigned char uint8;
+typedef   signed char  int8;
+
+typedef unsigned short uint16;
+typedef   signed short  int16;
+
+typedef unsigned int uint32;
+typedef   signed int  int32;
+
+typedef unsigned char ubyte;
+typedef unsigned short ushort;
+typedef unsigned int uint;
+
+#ifdef _WIN32
+	typedef   signed __int64  int64;
+	typedef unsigned __int64 uint64;
+#else
+	typedef   signed long long  int64;
+	typedef unsigned long long uint64;
+#endif
+*/</span><span class="pre">
+
+#ifdef _DEBUG
+#  define DEBUG
+#endif
+</span><span class="comment">
+/*- HSZK-s gépeken szedd ki!!-- */</span><span class="pre">
+#define SOUND
+</span><span class="comment">/* ---------------------------- */</span><span class="type">
+
+
+
+void</span> ErrorMsg<span class="operator">(</span><span class="keyword">const</span><span class="type"> char</span><span class="operator"> *</span>string<span class="operator">);</span><span class="type">
+void</span> WarningMsg<span class="operator">(</span><span class="keyword">const</span><span class="type"> char</span><span class="operator"> *</span>string<span class="operator">);</span><span class="type">
+void</span> InfoMsg<span class="operator">(</span><span class="keyword">const</span><span class="type"> char</span><span class="operator"> *</span>string<span class="operator">);</span><span class="pre">
+
+
+#endif // _PLATFORM_H_
+</span></pre>
+
+
+</body></html>

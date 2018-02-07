@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>C++ code colored by C++2HTML</title>
+<meta name="generator" content="C++2HTML by Jasper Bedaux">
+<!-- To generate your own colored code visit http://www.bedaux.net/cpp2html/ -->
+<style type="text/css">
+.comment { color: #999999; font-style: italic; }
+.pre { color: #000099; }
+.string { color: #009900; }
+.char { color: #009900; }
+.float { color: #996600; }
+.int { color: #999900; }
+.bool { color: #000000; font-weight: bold; }
+.type { color: #FF6633; }
+.flow { color: #FF0000; }
+.keyword { color: #990000; }
+.operator { color: #663300; font-weight: bold; }
+.operator { color: #663300; font-weight: bold; }
+</style>
+</head>
+<body>
+<pre><span class="comment">
+/** * * * BME-VIK-MI_2011_10_17 * * *|1.NHF|* * * * * * * * * *\
+*    _ _____   _____        __ _                              *
+*   (_)  __ \ / ____|      / _| |                             *
+*   |_| |__)| (___    ___ | |_| |___      ____ _ _ __ ___     *
+*   | |  _  / \___ \ / _ \|  _| __\ \ /\ / / _` | '__/ _ \    *
+*   | | | \ \ ____) | (_) | | | |_ \ V  V / (_| | | |  __/    *
+*   |_|_|  \_\_____/ \___/|_|  \__| \_/\_/ \__,_|_|  \___|    *
+*                                                             *
+*                   http://irsoftware.co.cc                   *
+*                                                             *
+*              contact_adress: sk8Geri@gmail.com               *
+*                                                               *
+*       This file is a part of the work done by aFagylaltos.     *
+*         You are free to use the code in any way you like,      *
+*         modified, unmodified or copied into your own work.     *
+*        However, I would like you to consider the following:    *
+*                                                               *
+*  -If you use this file and its contents unmodified,         *
+*              or use a major part of this file,               *
+*     please credit the author and leave this note untouched.   *
+*  -If you want to use anything in this file commercially,      *
+*                please request my approval.                    *
+*                                                              *
+\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */</span><span class="pre">
+
+#include "Events.h"
+#include "Engine.h"
+#include "Init.h"
+</span><span class="comment">
+/**
+    * is_touched : Vizsgálom, hogy a kártya benne van-e a kattintási területben
+    * @param card  : aktuális kártya, amit vizsgálunk
+    * @param size  : kártya mérete n*n-es
+    * @param x  : kattintási terület
+    * @param y  : kattintási terület
+    * @return Visszatérése igaz/hamis állítás: igaz, ha kártyára kattintottunk
+*/</span><span class="keyword">
+static</span><span class="type"> bool</span> is_touched<span class="operator">(</span>Card<span class="operator"> *</span>card<span class="operator">,</span><span class="type"> float</span> size<span class="operator">,</span><span class="type"> float</span> x<span class="operator">,</span><span class="type"> float</span> y<span class="operator">){</span><span class="type">
+   float</span> half<span class="operator"> =</span> size<span class="operator">/</span><span class="float">2.0</span><span class="operator">;</span><span class="flow">
+   return</span><span class="operator"> (</span>card<span class="operator">-&gt;</span>x<span class="operator"> -</span> half<span class="operator"> &lt;=</span> x<span class="operator"> &amp;&amp;</span> x<span class="operator"> &lt;</span> card<span class="operator">-&gt;</span>x<span class="operator"> +</span> half<span class="operator">
+       &amp;&amp;</span>  card<span class="operator">-&gt;</span>y<span class="operator"> -</span> half<span class="operator"> &lt;=</span> y<span class="operator"> &amp;&amp;</span> y<span class="operator"> &lt;</span> card<span class="operator">-&gt;</span>y<span class="operator"> +</span> half<span class="operator">);
+}</span><span class="comment">
+
+/**
+    * get_touched_card : Vizsgálom, hogy a kártyák benne vannak-e a kattintási területben
+    * @param x  : kattintási terület
+    * @param y  : kattintási terület
+    * @return Visszatérése igaz/hamis állítás: igaz, ha kártyára kattintottunk
+*/</span>
+Card<span class="operator"> *</span>get_touched_card<span class="operator">(</span><span class="type">float</span> x<span class="operator">,</span><span class="type"> float</span> y<span class="operator">){</span><span class="type">
+   int</span> i<span class="operator">;</span><span class="flow">
+
+   for</span><span class="operator"> (</span>i<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span> i<span class="operator"> &lt;</span> NUM_CELLS<span class="operator">;</span> i<span class="operator">++) {</span><span class="flow">
+      if</span><span class="operator"> (</span>is_touched<span class="operator">(&amp;</span>i_cards<span class="operator">[</span>i<span class="operator">],</span> i_card_size<span class="operator">,</span> x<span class="operator">,</span> y<span class="operator">))</span><span class="flow">
+         return</span><span class="operator"> &amp;</span>i_cards<span class="operator">[</span>i<span class="operator">];
+   }</span><span class="flow">
+
+   return</span><span class="bool"> false</span><span class="operator">;
+}</span><span class="comment">
+
+/**
+    * select_card : Kártya kiválasztás fv.
+    * Kiválasztás csak akkor lehet, ha a kártya állapota BACK azaz lefelé van fordítva.
+    * Kiválasztás esetén növelni kell a felfordított kártyák számát. [ i_front_count++; ]
+    * @param card  : Kiválasztott kártya
+    * @return nincs
+*/</span><span class="type">
+void</span> select_card<span class="operator">(</span>Card<span class="operator"> *</span>card<span class="operator">){</span><span class="flow">
+   if</span><span class="operator"> (</span>card<span class="operator">-&gt;</span>status<span class="operator"> ==</span> BACK<span class="operator"> &amp;&amp;</span> card<span class="operator">-&gt;</span>life<span class="operator">) {</span>
+      Image<span class="operator"> *</span>img<span class="operator"> = &amp;</span>card<span class="operator">-&gt;</span>front<span class="operator">;</span>
+      img<span class="operator">-&gt;</span>image<span class="operator"> =</span> card<span class="operator">-&gt;</span>id<span class="operator">;</span>
+      animation<span class="operator">(</span>img<span class="operator">, &amp;</span>img<span class="operator">-&gt;</span>opacity<span class="operator">,</span><span class="float">0.7</span><span class="operator">,</span><span class="float"> 0.15</span><span class="operator">);</span>
+
+      img<span class="operator"> = &amp;</span>card<span class="operator">-&gt;</span>back<span class="operator">;</span>
+      animation<span class="operator">(</span>img<span class="operator">, &amp;</span>img<span class="operator">-&gt;</span>scale_x<span class="operator">,</span><span class="float"> 0.4</span><span class="operator">,</span><span class="float"> 0.3</span><span class="operator">);</span>
+      animation<span class="operator">(</span>img<span class="operator">, &amp;</span>img<span class="operator">-&gt;</span>scale_y<span class="operator">,</span><span class="float"> 0.4</span><span class="operator">,</span><span class="float"> 0.3</span><span class="operator">);</span>
+      animation<span class="operator">(</span>img<span class="operator">, &amp;</span>img<span class="operator">-&gt;</span>opacity<span class="operator">,</span><span class="float"> 0.0</span><span class="operator">,</span><span class="float"> 0.15</span><span class="operator">);</span>
+
+      card<span class="operator">-&gt;</span>status<span class="operator">  =</span> FRONT<span class="operator">;</span>
+
+      i_front_count<span class="operator">++;</span><span class="flow">
+
+      if</span><span class="operator"> (</span>card<span class="operator">-&gt;</span>id<span class="operator"> ==</span> IMG_SZIV<span class="operator"> ||</span> card<span class="operator">-&gt;</span>id<span class="operator"> ==</span> IMG_HALAL<span class="operator">)</span> process_extrem<span class="operator">(</span>card<span class="operator">-&gt;</span>id<span class="operator">);
+   }
+}</span><span class="comment">
+
+/**
+    * unselect_card : Leveszi a kiválasztást az aktuális kártyáról, ha fel volt fordítva.
+    *  Állapotát átállítja : BACK
+    * Csökkenti a felfordított kártyák számát. [  i_front_count--; ]
+    * @param card  : Kiválasztott kártya
+    * @return nincs
+*/</span><span class="type">
+void</span> unselect_card<span class="operator">(</span>Card<span class="operator"> *</span>card<span class="operator">){</span><span class="flow">
+   if</span><span class="operator"> (</span>card<span class="operator">-&gt;</span>status<span class="operator"> !=</span> BACK<span class="operator">) {</span>
+      Image<span class="operator"> *</span>img<span class="operator"> = &amp;</span>card<span class="operator">-&gt;</span>front<span class="operator">;</span>
+      animation<span class="operator">(</span>img<span class="operator">, &amp;</span>img<span class="operator">-&gt;</span>opacity<span class="operator">,</span><span class="float"> 0.0</span><span class="operator">,</span><span class="float">0.15</span><span class="operator">);</span>
+
+      img<span class="operator"> = &amp;</span>card<span class="operator">-&gt;</span>back<span class="operator">;</span>
+      animation<span class="operator">(</span>img<span class="operator">, &amp;</span>img<span class="operator">-&gt;</span>scale_x<span class="operator">,</span><span class="float"> 1.0</span><span class="operator">,</span><span class="float"> 0.3</span><span class="operator">);</span>
+      animation<span class="operator">(</span>img<span class="operator">, &amp;</span>img<span class="operator">-&gt;</span>scale_y<span class="operator">,</span><span class="float"> 1.0</span><span class="operator">,</span><span class="float"> 0.3</span><span class="operator">);</span><span class="flow">
+      if</span><span class="operator">(</span>card<span class="operator">-&gt;</span>life<span class="operator">==</span><span class="int">0</span><span class="operator">){</span>
+           animation<span class="operator">(</span>img<span class="operator">, &amp;</span>img<span class="operator">-&gt;</span>opacity<span class="operator">,</span><span class="float"> 0.2</span><span class="operator">,</span><span class="float"> 0.15</span><span class="operator">);</span><span class="flow">
+        if</span><span class="operator">(</span>i_actual_player<span class="operator">){</span>
+            animation<span class="operator">(</span>img<span class="operator">, &amp;</span>img<span class="operator">-&gt;</span>x<span class="operator">,</span><span class="int"> 900</span><span class="operator">,</span><span class="float"> 0.3</span><span class="operator">);</span>
+            animation<span class="operator">(</span>img<span class="operator">, &amp;</span>img<span class="operator">-&gt;</span>y<span class="operator">, (</span><span class="int">100</span><span class="operator">+(</span>i_players<span class="operator">[</span>i_actual_player<span class="operator">].</span>score<span class="operator">*</span><span class="int">10</span><span class="operator">)),</span><span class="float"> 0.3</span><span class="operator">);
+        }</span><span class="flow">else</span><span class="operator">{</span>
+            animation<span class="operator">(</span>img<span class="operator">, &amp;</span>img<span class="operator">-&gt;</span>x<span class="operator">,</span><span class="int"> 100</span><span class="operator">,</span><span class="float"> 0.3</span><span class="operator">);</span>
+            animation<span class="operator">(</span>img<span class="operator">, &amp;</span>img<span class="operator">-&gt;</span>y<span class="operator">, (</span><span class="int">100</span><span class="operator">+(</span>i_players<span class="operator">[</span>i_actual_player<span class="operator">].</span>score<span class="operator">*</span><span class="int">10</span><span class="operator">)),</span><span class="float"> 0.3</span><span class="operator">);
+        }
+      }</span><span class="flow">
+      else</span>
+        animation<span class="operator">(</span>img<span class="operator">, &amp;</span>img<span class="operator">-&gt;</span>opacity<span class="operator">,</span><span class="float"> 0.7</span><span class="operator">,</span><span class="float"> 0.15</span><span class="operator">);</span>
+
+
+
+      card<span class="operator">-&gt;</span>status<span class="operator"> =</span> BACK<span class="operator">;</span>
+      i_front_count<span class="operator">--;
+   }
+}</span><span class="comment">
+
+/**
+    * unselect_all_cards : Az összes kártyát lefordítja
+    * Meghívja az unselect_card() fv.-t, ami elvégzi a lefordításokat.
+    * @return nincs
+*/</span><span class="type">
+void</span> unselect_all_cards<span class="operator">(){</span><span class="type">
+   int</span> i<span class="operator">;</span><span class="flow">
+
+   for</span><span class="operator"> (</span>i<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span> i<span class="operator"> &lt;</span> NUM_CELLS<span class="operator">;</span> i<span class="operator">++)</span>
+      unselect_card<span class="operator">(&amp;</span>i_cards<span class="operator">[</span>i<span class="operator">]);
+}</span><span class="comment">
+
+/**
+    * on_mouse_down : Egér gomb lenyomás, kártya vizsgálat...
+    * @param x  : egér kattintás x helye
+    * @param y  : egér kattintás y helye
+    * @param mbut  : mouse button = egér kattintás ,ha volt értéke 1 lesz
+    * @return nincs
+*/</span><span class="type">
+void</span> on_mouse_down<span class="operator">(</span><span class="type">float</span> x<span class="operator">,</span><span class="type"> float</span> y<span class="operator">,</span><span class="type"> int</span> mbut<span class="operator">){</span>
+   Card<span class="operator"> *</span>card<span class="operator">;</span><span class="flow">
+
+   if</span><span class="operator"> (</span>mbut<span class="operator"> ==</span><span class="int"> 1</span><span class="operator">) {</span><span class="flow">
+      if</span><span class="operator"> ((</span>card<span class="operator"> =</span> get_touched_card<span class="operator">(</span>x<span class="operator">,</span> y<span class="operator">)))</span>
+         select_card<span class="operator">(</span>card<span class="operator">);
+   }
+}</span><span class="comment">
+
+/**
+    * on_mouse_down : Egér mozgatás. Kártya effekt...
+    * @param x  : egér x poziciója
+    * @param y  : egér y poziciója
+    * @return nincs
+*/</span><span class="type">
+void</span> on_mouse_axes<span class="operator">(</span><span class="type">float</span> x<span class="operator">,</span><span class="type"> float</span> y<span class="operator">){</span>
+  Card<span class="operator"> *</span>card<span class="operator"> =</span> get_touched_card<span class="operator">(</span>x<span class="operator">,</span> y<span class="operator">);</span><span class="flow">
+
+   if</span><span class="operator"> (</span>card<span class="operator"> ==</span> i_hover_card<span class="operator">)</span><span class="flow">
+      return</span><span class="operator">;</span><span class="flow">
+
+   if</span><span class="operator"> (</span>i_hover_card<span class="operator"> &amp;&amp;</span> i_hover_card<span class="operator">-&gt;</span>life<span class="operator"> &amp;&amp;</span> i_hover_card<span class="operator">-&gt;</span>status<span class="operator">==</span>BACK<span class="operator">) {</span>
+      Image<span class="operator"> *</span>img<span class="operator"> = &amp;</span>i_hover_card<span class="operator">-&gt;</span>back<span class="operator">;</span>
+      animation<span class="operator">(</span>img<span class="operator">, &amp;</span>img<span class="operator">-&gt;</span>opacity<span class="operator">,</span><span class="float"> 0.7</span><span class="operator">,</span><span class="float"> 0.2</span><span class="operator">);</span>
+
+      img<span class="operator"> = &amp;</span>i_hover_card<span class="operator">-&gt;</span>back<span class="operator">;</span>
+      animation<span class="operator">(</span>img<span class="operator">, &amp;</span>img<span class="operator">-&gt;</span>scale_x<span class="operator">,</span><span class="float"> 1.0</span><span class="operator">,</span><span class="float"> 0.3</span><span class="operator">);</span>
+      animation<span class="operator">(</span>img<span class="operator">, &amp;</span>img<span class="operator">-&gt;</span>scale_y<span class="operator">,</span><span class="float"> 1.0</span><span class="operator">,</span><span class="float"> 0.3</span><span class="operator">);
+   }</span>
+
+   i_hover_card<span class="operator"> =</span> card<span class="operator">;</span><span class="flow">
+
+   if</span><span class="operator"> (</span>i_hover_card<span class="operator"> &amp;&amp;</span> i_hover_card<span class="operator">-&gt;</span>life<span class="operator"> &amp;&amp;</span> i_hover_card<span class="operator">-&gt;</span>status<span class="operator">==</span>BACK<span class="operator">) {</span>
+      Image<span class="operator"> *</span>img<span class="operator"> = &amp;</span>i_hover_card<span class="operator">-&gt;</span>back<span class="operator">;</span>
+      animation<span class="operator">(</span>img<span class="operator">, &amp;</span>img<span class="operator">-&gt;</span>opacity<span class="operator">,</span><span class="float"> 1.0</span><span class="operator">,</span><span class="float"> 0.2</span><span class="operator">);</span>
+
+      img<span class="operator"> = &amp;</span>card<span class="operator">-&gt;</span>back<span class="operator">;</span>
+      animation<span class="operator">(</span>img<span class="operator">, &amp;</span>img<span class="operator">-&gt;</span>scale_x<span class="operator">,</span><span class="float"> 1.1</span><span class="operator">,</span><span class="float"> 0.3</span><span class="operator">);</span>
+      animation<span class="operator">(</span>img<span class="operator">, &amp;</span>img<span class="operator">-&gt;</span>scale_y<span class="operator">,</span><span class="float"> 1.1</span><span class="operator">,</span><span class="float"> 0.3</span><span class="operator">);</span><span class="pre">
+#ifdef SOUND
+</span>      al_play_sample<span class="operator">(</span>i_sounds<span class="operator">[</span>SOUND_SELECT<span class="operator">],</span><span class="float"> 1.0</span><span class="operator">,</span><span class="float"> 0.0</span><span class="operator">,</span><span class="float"> 1.0</span><span class="operator">,</span> ALLEGRO_PLAYMODE_ONCE<span class="operator">,</span> NULL<span class="operator">);</span><span class="pre">
+#endif
+</span><span class="operator">
+   }
+}</span>
+</pre>
+
+
+</body></html>

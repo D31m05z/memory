@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>C++ code colored by C++2HTML</title>
+<meta name="generator" content="C++2HTML by Jasper Bedaux">
+<!-- To generate your own colored code visit http://www.bedaux.net/cpp2html/ -->
+<style type="text/css">
+.comment { color: #999999; font-style: italic; }
+.pre { color: #000099; }
+.string { color: #009900; }
+.char { color: #009900; }
+.float { color: #996600; }
+.int { color: #999900; }
+.bool { color: #000000; font-weight: bold; }
+.type { color: #FF6633; }
+.flow { color: #FF0000; }
+.keyword { color: #990000; }
+.operator { color: #663300; font-weight: bold; }
+.operator { color: #663300; font-weight: bold; }
+</style>
+</head>
+<body>
+<pre><span class="comment">//./$(ConfigurationName)
+</span><span class="comment">/** * * * BME-VIK-MI_2011_10_17 * * *|1.NHF|* * * * * * * * * *\
+*    _ _____   _____        __ _                              *
+*   (_)  __ \ / ____|      / _| |                             *
+*   |_| |__)| (___    ___ | |_| |___      ____ _ _ __ ___     *
+*   | |  _  / \___ \ / _ \|  _| __\ \ /\ / / _` | '__/ _ \    *
+*   | | | \ \ ____) | (_) | | | |_ \ V  V / (_| | | |  __/    *
+*   |_|_|  \_\_____/ \___/|_|  \__| \_/\_/ \__,_|_|  \___|    *
+*                                                             *
+*                   http://irsoftware.co.cc                   *
+*                                                             *
+*              contact_adress: sk8Geri@gmail.com               *
+*                                                               *
+*       This file is a part of the work done by aFagylaltos.     *
+*         You are free to use the code in any way you like,      *
+*         modified, unmodified or copied into your own work.     *
+*        However, I would like you to consider the following:    *
+*                                                               *
+*  -If you use this file and its contents unmodified,         *
+*              or use a major part of this file,               *
+*     please credit the author and leave this note untouched.   *
+*  -If you want to use anything in this file commercially,      *
+*                please request my approval.                    *
+*                                                              *
+\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */</span><span class="pre">
+
+#include "Engine.h"
+#include "Init.h"
+</span><span class="comment">
+/**
+    * draw_image : kirajzol egy kártya oldalt
+    * @param img : kirajzoldandó kép
+    * @return nincs
+*/</span><span class="keyword">
+static</span><span class="type"> void</span> draw_image<span class="operator">(</span><span class="keyword">const</span> Image<span class="operator"> *</span>img<span class="operator">){</span>
+   ALLEGRO_BITMAP<span class="operator"> *</span>bmp<span class="operator">;</span>
+   ALLEGRO_COLOR tint<span class="operator">;</span><span class="type">
+   float</span> cx<span class="operator">,</span> cy<span class="operator">;</span>
+
+   bmp<span class="operator"> =</span> i_images<span class="operator">[</span>img<span class="operator">-&gt;</span>image<span class="operator">];</span>
+   cx<span class="operator"> =</span> img<span class="operator">-&gt;</span>align_x<span class="operator"> *</span> al_get_bitmap_width<span class="operator">(</span>bmp<span class="operator">);</span>
+   cy<span class="operator"> =</span> img<span class="operator">-&gt;</span>align_y<span class="operator"> *</span> al_get_bitmap_height<span class="operator">(</span>bmp<span class="operator">);</span>
+   tint<span class="operator"> =</span> al_map_rgba_f<span class="operator">(</span>img<span class="operator">-&gt;</span>r<span class="operator">,</span> img<span class="operator">-&gt;</span>g<span class="operator">,</span> img<span class="operator">-&gt;</span>b<span class="operator">,</span> img<span class="operator">-&gt;</span>opacity<span class="operator">);</span>
+
+   al_draw_tinted_scaled_rotated_bitmap<span class="operator">(</span>bmp<span class="operator">,</span> tint<span class="operator">,</span> cx<span class="operator">,</span> cy<span class="operator">,</span>
+      img<span class="operator">-&gt;</span>x<span class="operator">,</span> img<span class="operator">-&gt;</span>y<span class="operator">,</span> img<span class="operator">-&gt;</span>scale_x<span class="operator">,</span> img<span class="operator">-&gt;</span>scale_y<span class="operator">,</span> img<span class="operator">-&gt;</span>angle<span class="operator">,</span><span class="int"> 0</span><span class="operator">);
+
+}</span><span class="comment">
+
+/**
+    * draw_card : kirajzol egy kártyát
+    * @param card : kirajzoldandó kártya
+    * @return nincs
+*/</span><span class="keyword">
+static</span><span class="type"> void</span> draw_card<span class="operator">(</span><span class="keyword">const</span> Card<span class="operator"> *</span>card<span class="operator">){</span>
+   draw_image<span class="operator">(&amp;</span>card<span class="operator">-&gt;</span>back<span class="operator">);</span>
+   draw_image<span class="operator">(&amp;</span>card<span class="operator">-&gt;</span>front<span class="operator">);
+}</span><span class="comment">
+
+/**
+    * draw_menu : kirajzolja a menüt
+    * @return nincs
+*/</span><span class="type">
+void</span> draw_menu<span class="operator">(){</span>
+   al_clear_to_color<span class="operator">(</span>al_map_rgb<span class="operator">(</span><span class="int">0</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">));</span>
+
+   al_set_blender<span class="operator">(</span>ALLEGRO_ADD<span class="operator">,</span> ALLEGRO_ALPHA<span class="operator">,</span> ALLEGRO_ONE<span class="operator">);</span>
+
+   draw_image<span class="operator">(&amp;</span>i_title_game<span class="operator">);</span>
+   draw_image<span class="operator">(&amp;</span>i_title_logo<span class="operator">);</span>
+   draw_image<span class="operator">(&amp;</span>i_logo_overlay<span class="operator">);</span>
+
+   al_draw_textf<span class="operator">(</span>i_font<span class="operator">,</span> al_map_rgb<span class="operator">(</span><span class="int">0xad</span><span class="operator">,</span><span class="int"> 0xd8</span><span class="operator">,</span><span class="int"> 0xe6</span><span class="operator">),</span><span class="int"> 100</span><span class="operator">,</span><span class="int"> 250</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">,</span><span class="string"> "&lt;ENTER&gt; - START"</span><span class="operator">);</span>
+   al_draw_textf<span class="operator">(</span>i_font<span class="operator">,</span> al_map_rgb<span class="operator">(</span><span class="int">0xad</span><span class="operator">,</span><span class="int"> 0xd8</span><span class="operator">,</span><span class="int"> 0xe6</span><span class="operator">),</span><span class="int"> 100</span><span class="operator">,</span><span class="int"> 300</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">,</span><span class="string"> "&lt;M&gt;     - jatek mod : %s"</span><span class="operator">,</span>i_game_type<span class="operator"> ?</span><span class="string"> "EXTREM"</span><span class="operator"> :</span><span class="string"> "NORMAL"</span><span class="operator">);</span>
+   al_draw_textf<span class="operator">(</span>i_font<span class="operator">,</span> al_map_rgb<span class="operator">(</span><span class="int">0xad</span><span class="operator">,</span><span class="int"> 0xd8</span><span class="operator">,</span><span class="int"> 0xe6</span><span class="operator">),</span><span class="int"> 100</span><span class="operator">,</span><span class="int"> 350</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">,</span><span class="string"> "&lt;ESC&gt;   - EXIT"</span><span class="operator">);</span>
+
+   al_flip_display<span class="operator">();
+}</span><span class="comment">
+
+/**
+    * draw_screen : kirajzolja a pályát
+    * @return nincs
+*/</span><span class="type">
+void</span> draw_screen<span class="operator">(){</span><span class="type">
+   int</span> i<span class="operator">;</span>
+
+   al_clear_to_color<span class="operator">(</span>al_map_rgb<span class="operator">(</span><span class="int">0</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">));</span>
+
+   al_set_blender<span class="operator">(</span>ALLEGRO_ADD<span class="operator">,</span> ALLEGRO_ALPHA<span class="operator">,</span> ALLEGRO_ONE<span class="operator">);</span>
+
+   draw_image<span class="operator">(&amp;</span>i_glow<span class="operator">);</span>
+   draw_image<span class="operator">(&amp;</span>i_glow_overlay<span class="operator">);</span><span class="flow">
+
+   for</span><span class="operator"> (</span>i<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span> i<span class="operator"> &lt;</span> NUM_CELLS<span class="operator">;</span> i<span class="operator">++)</span>
+      draw_card<span class="operator">(&amp;</span>i_cards<span class="operator">[</span>i<span class="operator">]);</span>
+
+
+    al_draw_textf<span class="operator">(</span>i_font<span class="operator">,</span> al_map_rgb<span class="operator">(</span><span class="int">0xad</span><span class="operator">,</span><span class="int"> 0xd8</span><span class="operator">,</span><span class="int"> 0xe6</span><span class="operator">),</span><span class="int"> 2</span><span class="operator">,</span><span class="int"> 2</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">,</span><span class="string"> "%s"</span><span class="operator">,</span>i_players<span class="operator">[</span><span class="int">0</span><span class="operator">].</span>name<span class="operator">);</span>
+    al_draw_textf<span class="operator">(</span>i_font<span class="operator">,</span> al_map_rgb<span class="operator">(</span><span class="int">0xad</span><span class="operator">,</span><span class="int"> 0xd8</span><span class="operator">,</span><span class="int"> 0xe6</span><span class="operator">),</span><span class="int"> 10</span><span class="operator">,</span><span class="int"> 50</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">,</span><span class="string"> "%d"</span><span class="operator">,</span>i_players<span class="operator">[</span><span class="int">0</span><span class="operator">].</span>score<span class="operator">);</span>
+
+    al_draw_textf<span class="operator">(</span>i_font<span class="operator">,</span> al_map_rgb<span class="operator">(</span><span class="int">0xff</span><span class="operator">,</span><span class="int"> 0x00</span><span class="operator">,</span><span class="int"> 0x00</span><span class="operator">),</span><span class="int"> 800</span><span class="operator">,</span><span class="int"> 2</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">,</span><span class="string"> "%s"</span><span class="operator">,</span>i_players<span class="operator">[</span><span class="int">1</span><span class="operator">].</span>name<span class="operator">);</span>
+    al_draw_textf<span class="operator">(</span>i_font<span class="operator">,</span> al_map_rgb<span class="operator">(</span><span class="int">0xff</span><span class="operator">,</span><span class="int"> 0x00</span><span class="operator">,</span><span class="int"> 0x00</span><span class="operator">),</span><span class="int"> 850</span><span class="operator">,</span><span class="int"> 50</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">,</span><span class="string"> "%d"</span><span class="operator">,</span>i_players<span class="operator">[</span><span class="int">1</span><span class="operator">].</span>score<span class="operator">);</span>
+    al_draw_textf<span class="operator">(</span>i_font<span class="operator">,</span> al_map_rgb<span class="operator">(</span><span class="int">0x41</span><span class="operator">,</span><span class="int"> 0x69</span><span class="operator">,</span><span class="int"> 0xe1</span><span class="operator">),</span><span class="int"> 10</span><span class="operator">,</span><span class="int"> 550</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">,</span><span class="string"> "round:%d"</span><span class="operator">,</span>i_round<span class="operator">);</span><span class="pre">
+
+#ifdef DEBUG
+</span>    al_draw_textf<span class="operator">(</span>i_font<span class="operator">,</span> al_map_rgb<span class="operator">(</span><span class="int">0x41</span><span class="operator">,</span><span class="int"> 0x69</span><span class="operator">,</span><span class="int"> 0xe1</span><span class="operator">),</span><span class="int"> 270</span><span class="operator">,</span><span class="int">550</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">,</span><span class="string"> " f:%d h:%d s:%d a:%d"</span><span class="operator">,</span>i_front_count<span class="operator">,</span>i_halal<span class="operator">,</span>i_sziv<span class="operator">,</span>i_actual_player<span class="operator">);</span><span class="pre">
+#endif
+</span><span class="flow">
+
+    if</span><span class="operator">(</span>i_found<span class="operator">== (</span>i_game_type<span class="operator">?</span><span class="int"> 7</span><span class="operator">:</span><span class="int"> 8</span><span class="operator">)){</span><span class="flow">
+        if</span><span class="operator">(</span>i_players<span class="operator">[</span><span class="int">0</span><span class="operator">].</span>score<span class="operator">&gt;</span>i_players<span class="operator">[</span><span class="int">1</span><span class="operator">].</span>score<span class="operator">)</span>
+             al_draw_textf<span class="operator">(</span>i_font<span class="operator">,</span> al_map_rgb<span class="operator">(</span><span class="int">0xad</span><span class="operator">,</span><span class="int"> 0xd8</span><span class="operator">,</span><span class="int"> 0xe6</span><span class="operator">),</span> i_width<span class="operator">/</span><span class="int">2</span><span class="operator">-</span><span class="int">100</span><span class="operator">,</span> i_height<span class="operator">/</span><span class="int">2</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">,</span><span class="string"> "Nyert: %s !"</span><span class="operator">,</span>i_players<span class="operator">[</span><span class="int">0</span><span class="operator">].</span>name<span class="operator">);</span><span class="flow">
+        else if</span><span class="operator">(</span>i_players<span class="operator">[</span><span class="int">0</span><span class="operator">].</span>score<span class="operator">&lt;</span>i_players<span class="operator">[</span><span class="int">1</span><span class="operator">].</span>score<span class="operator">)</span>
+             al_draw_textf<span class="operator">(</span>i_font<span class="operator">,</span> al_map_rgb<span class="operator">(</span><span class="int">0xad</span><span class="operator">,</span><span class="int"> 0xd8</span><span class="operator">,</span><span class="int"> 0xe6</span><span class="operator">),</span> i_width<span class="operator">/</span><span class="int">2</span><span class="operator">-</span><span class="int">100</span><span class="operator">,</span> i_height<span class="operator">/</span><span class="int">2</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">,</span><span class="string"> "Nyert: %s !"</span><span class="operator">,</span>i_players<span class="operator">[</span><span class="int">1</span><span class="operator">].</span>name<span class="operator">);</span><span class="flow">
+        else</span> al_draw_textf<span class="operator">(</span>i_font<span class="operator">,</span> al_map_rgb<span class="operator">(</span><span class="int">0xad</span><span class="operator">,</span><span class="int"> 0xd8</span><span class="operator">,</span><span class="int"> 0xe6</span><span class="operator">),</span> i_width<span class="operator">/</span><span class="int">2</span><span class="operator">-</span><span class="int">100</span><span class="operator">,</span> i_height<span class="operator">/</span><span class="int">2</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">,</span><span class="string"> "Dontetlen!"</span><span class="operator">);</span>
+
+        al_draw_textf<span class="operator">(</span>i_font<span class="operator">,</span> al_map_rgb<span class="operator">(</span><span class="int">0xad</span><span class="operator">,</span><span class="int"> 0xd8</span><span class="operator">,</span><span class="int"> 0xe6</span><span class="operator">),</span> i_width<span class="operator">/</span><span class="int">2</span><span class="operator">-</span><span class="int">100</span><span class="operator">,</span> i_height<span class="operator">/</span><span class="int">2</span><span class="operator">+</span><span class="int">50</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">,</span><span class="string"> "Kilepes : &lt;ESC&gt;"</span><span class="operator">);</span>
+        al_draw_textf<span class="operator">(</span>i_font<span class="operator">,</span> al_map_rgb<span class="operator">(</span><span class="int">0xad</span><span class="operator">,</span><span class="int"> 0xd8</span><span class="operator">,</span><span class="int"> 0xe6</span><span class="operator">),</span> i_width<span class="operator">/</span><span class="int">2</span><span class="operator">-</span><span class="int">100</span><span class="operator">,</span> i_height<span class="operator">/</span><span class="int">2</span><span class="operator">+</span><span class="int">100</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">,</span><span class="string"> "Uj jatek : &lt;N&gt;"</span><span class="operator">);
+    }</span>
+   al_flip_display<span class="operator">();
+}</span>
+</pre>
+
+
+</body></html>

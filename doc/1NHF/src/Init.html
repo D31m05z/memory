@@ -1,0 +1,398 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>C++ code colored by C++2HTML</title>
+<meta name="generator" content="C++2HTML by Jasper Bedaux">
+<!-- To generate your own colored code visit http://www.bedaux.net/cpp2html/ -->
+<style type="text/css">
+.comment { color: #999999; font-style: italic; }
+.pre { color: #000099; }
+.string { color: #009900; }
+.char { color: #009900; }
+.float { color: #996600; }
+.int { color: #999900; }
+.bool { color: #000000; font-weight: bold; }
+.type { color: #FF6633; }
+.flow { color: #FF0000; }
+.keyword { color: #990000; }
+.operator { color: #663300; font-weight: bold; }
+.operator { color: #663300; font-weight: bold; }
+</style>
+</head>
+<body>
+<pre><span class="comment">
+/** * * * BME-VIK-MI_2011_10_17 * * *|1.NHF|* * * * * * * * * *\
+*    _ _____   _____        __ _                              *
+*   (_)  __ \ / ____|      / _| |                             *
+*   |_| |__)| (___    ___ | |_| |___      ____ _ _ __ ___     *
+*   | |  _  / \___ \ / _ \|  _| __\ \ /\ / / _` | '__/ _ \    *
+*   | | | \ \ ____) | (_) | | | |_ \ V  V / (_| | | |  __/    *
+*   |_|_|  \_\_____/ \___/|_|  \__| \_/\_/ \__,_|_|  \___|    *
+*                                                             *
+*                   http://irsoftware.co.cc                   *
+*                                                             *
+*              contact_adress: sk8Geri@gmail.com               *
+*                                                               *
+*       This file is a part of the work done by aFagylaltos.     *
+*         You are free to use the code in any way you like,      *
+*         modified, unmodified or copied into your own work.     *
+*        However, I would like you to consider the following:    *
+*                                                               *
+*  -If you use this file and its contents unmodified,         *
+*              or use a major part of this file,               *
+*     please credit the author and leave this note untouched.   *
+*  -If you want to use anything in this file commercially,      *
+*                please request my approval.                    *
+*                                                              *
+\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */</span><span class="pre">
+
+#include "Init.h"
+#include "Engine.h"
+</span><span class="comment">
+/**
+    * init_system : inicializálja a paramétereket
+    * a gtk-t linux esetén
+    * a hangot és a font bitmap-et
+    * @return hibajelzés - 0: succes 1: fail
+*/</span><span class="type">
+int</span> init_system<span class="operator">(){</span>
+    srand<span class="operator">(</span>time<span class="operator">(</span><span class="int">0</span><span class="operator">));</span>
+
+    i_hover_card<span class="operator">=</span>NULL<span class="operator">;</span>
+    i_actual_player<span class="operator">=</span><span class="int">0</span><span class="operator">;</span>
+    i_time<span class="operator">=</span><span class="int">0</span><span class="operator">;</span>
+    i_front_count<span class="operator">=</span><span class="int">0</span><span class="operator">;</span>
+    i_round<span class="operator">=</span><span class="int">0</span><span class="operator">;</span>
+    i_found<span class="operator">=</span><span class="int">0</span><span class="operator">;</span>
+    i_game_type<span class="operator"> =</span> NORMAL<span class="operator">;</span>
+    i_sziv<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span>
+    i_halal<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span>
+
+    i_width<span class="operator"> =</span><span class="int"> 1024</span><span class="operator">;</span>
+    i_height<span class="operator"> =</span><span class="int"> 600</span><span class="operator">;</span>
+    i_card_size<span class="operator"> =</span><span class="int"> 128</span><span class="operator">;</span>
+    i_refresh_rate<span class="operator"> =</span><span class="float"> 60.0</span><span class="operator">;</span><span class="flow">
+
+
+
+
+  if</span><span class="operator"> (!</span>al_init<span class="operator">()) {</span>
+       printf<span class="operator">(</span><span class="string">"error: init_allegro\n"</span><span class="operator">);</span><span class="flow">
+       return</span><span class="int"> 1</span><span class="operator">;
+   }</span><span class="pre">
+
+#ifdef LINUX
+</span><span class="comment">   /* ez csak akkor működik ha az allegro inicializálás után tesszük be!
+      linux esetén */</span>
+   gtk_init<span class="operator">(</span>NULL<span class="operator">,</span> NULL<span class="operator">);</span><span class="pre">
+#endif
+</span>
+InfoMsg<span class="operator">(</span><span class="string">"PASS: ALLEGRO_INIT\n"</span><span class="operator">);</span><span class="pre">
+
+#ifdef SOUND
+</span><span class="flow">   if</span><span class="operator"> (!</span>al_install_audio<span class="operator">() || !</span>al_reserve_samples<span class="operator">(</span><span class="int">128</span><span class="operator">)) {</span>
+      ErrorMsg<span class="operator">(</span><span class="string">"error: init_audio\n"</span><span class="operator">);</span><span class="flow">
+      return</span><span class="int"> 1</span><span class="operator">;
+   }</span>
+InfoMsg<span class="operator">(</span><span class="string">"PASS: AUDIO_INIT\n"</span><span class="operator">);</span><span class="pre">
+#endif
+</span>
+InfoMsg<span class="operator">(</span><span class="string">"INIT: al_init_acodec_addon\n"</span><span class="operator">);</span>
+   al_init_acodec_addon<span class="operator">();</span>
+InfoMsg<span class="operator">(</span><span class="string">"INIT: al_init_image_addon\n"</span><span class="operator">);</span>
+   al_init_image_addon<span class="operator">();</span>
+InfoMsg<span class="operator">(</span><span class="string">"INIT: al_init_font_addon\n"</span><span class="operator">);</span>
+   al_init_font_addon<span class="operator">();</span><span class="flow">
+
+
+    return</span><span class="int"> 0</span><span class="operator">;
+}</span><span class="comment">
+
+/**
+    * init_render : inicializálja a grafikus felületet
+    * @return hibajelzés - 0: succes 1: fail
+*/</span><span class="type">
+int</span> init_render<span class="operator">(){</span>
+   i_display<span class="operator"> =</span> al_create_display<span class="operator">(</span>i_width<span class="operator">,</span> i_height<span class="operator">);</span><span class="flow">
+   if</span><span class="operator"> (!</span>i_display<span class="operator">) {</span>
+      ErrorMsg<span class="operator">(</span><span class="string">"error: create_display\n"</span><span class="operator">);</span><span class="flow">
+      return</span><span class="int"> 1</span><span class="operator">;
+   }</span>
+   al_set_window_title<span class="operator">(</span>i_display<span class="operator">,</span><span class="string"> "BME-VIK MI 2011_11_5 : 1.NHF [MEMORY - V.0.5]"</span><span class="operator">);</span><span class="flow">
+
+    return</span><span class="int"> 0</span><span class="operator">;
+}</span><span class="comment">
+
+/**
+    * load_images : betölti a képeket
+    * @return hibajelzés - 0: succes 1: fail
+*/</span><span class="type">
+int</span> load_images<span class="operator">(){</span><span class="type">
+    int</span> i<span class="operator">;</span>
+
+    al_set_new_bitmap_flags<span class="operator">(</span>ALLEGRO_MIN_LINEAR<span class="operator"> |</span> ALLEGRO_MAG_LINEAR<span class="operator">);</span>
+
+    i_images<span class="operator">[</span>IMG_1<span class="operator">]            =</span> al_load_bitmap<span class="operator">(</span>GAME_PATH<span class="string"> "images/00.jpg"</span><span class="operator">);</span>
+    i_images<span class="operator">[</span>IMG_2<span class="operator">]            =</span> al_load_bitmap<span class="operator">(</span>GAME_PATH<span class="string"> "images/01.jpg"</span><span class="operator">);</span>
+    i_images<span class="operator">[</span>IMG_3<span class="operator">]            =</span> al_load_bitmap<span class="operator">(</span>GAME_PATH<span class="string"> "images/02.jpg"</span><span class="operator">);</span>
+    i_images<span class="operator">[</span>IMG_4<span class="operator">]            =</span> al_load_bitmap<span class="operator">(</span>GAME_PATH<span class="string"> "images/03.jpg"</span><span class="operator">);</span>
+    i_images<span class="operator">[</span>IMG_5<span class="operator">]            =</span> al_load_bitmap<span class="operator">(</span>GAME_PATH<span class="string"> "images/04.jpg"</span><span class="operator">);</span>
+    i_images<span class="operator">[</span>IMG_6<span class="operator">]            =</span> al_load_bitmap<span class="operator">(</span>GAME_PATH<span class="string"> "images/05.jpg"</span><span class="operator">);</span>
+    i_images<span class="operator">[</span>IMG_7<span class="operator">]            =</span> al_load_bitmap<span class="operator">(</span>GAME_PATH<span class="string"> "images/06.jpg"</span><span class="operator">);</span>
+    i_images<span class="operator">[</span>IMG_8<span class="operator">]            =</span> al_load_bitmap<span class="operator">(</span>GAME_PATH<span class="string"> "images/07.jpg"</span><span class="operator">);</span>
+    i_images<span class="operator">[</span>IMG_SZIV<span class="operator">]         =</span> al_load_bitmap<span class="operator">(</span>GAME_PATH<span class="string"> "images/sziv.jpg"</span><span class="operator">);</span>
+    i_images<span class="operator">[</span>IMG_HALAL<span class="operator">]        =</span> al_load_bitmap<span class="operator">(</span>GAME_PATH<span class="string"> "images/halal.jpg"</span><span class="operator">);</span>
+
+    i_images<span class="operator">[</span>IMG_BACK<span class="operator">]         =</span> al_load_bitmap<span class="operator">(</span>GAME_PATH<span class="string"> "images/back.jpg"</span><span class="operator">);</span>
+    i_images<span class="operator">[</span>IMG_GLOW<span class="operator">]         =</span> al_load_bitmap<span class="operator">(</span>GAME_PATH<span class="string"> "effects/glow.png"</span><span class="operator">);</span>
+    i_images<span class="operator">[</span>IMG_GLOW_OVERLAY<span class="operator">] =</span> al_load_bitmap<span class="operator">(</span>GAME_PATH<span class="string"> "effects/background.png"</span><span class="operator">);</span>
+
+    i_images<span class="operator">[</span>IMG_TITLE_GAME<span class="operator">]   =</span> al_load_bitmap<span class="operator">(</span>GAME_PATH<span class="string"> "logo/title_game.png"</span><span class="operator">);</span>
+    i_images<span class="operator">[</span>IMG_TITLE_LOGO<span class="operator">]   =</span> al_load_bitmap<span class="operator">(</span>GAME_PATH<span class="string"> "logo/title_logo.png"</span><span class="operator">);</span>
+    i_images<span class="operator">[</span>IMG_LOGO<span class="operator">]         =</span> al_load_bitmap<span class="operator">(</span>GAME_PATH<span class="string"> "logo/logo.png"</span><span class="operator">);</span><span class="flow">
+
+    for</span><span class="operator"> (</span>i<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span> i<span class="operator"> &lt;</span> IMG_NUM<span class="operator">;</span> i<span class="operator">++) {</span><span class="flow">
+      if</span><span class="operator"> (</span>i_images<span class="operator">[</span>i<span class="operator">] ==</span> NULL<span class="operator">){</span><span class="type">
+        char</span> _ERROR_<span class="operator">[</span><span class="int">128</span><span class="operator">];</span>
+		sprintf<span class="operator">(</span>_ERROR_<span class="operator">,</span><span class="string"> "error: loading image - id:%d\n"</span><span class="operator">,</span>i<span class="operator">);</span>
+        ErrorMsg<span class="operator">(</span>_ERROR_<span class="operator">);</span><span class="flow">
+      return</span><span class="int"> 1</span><span class="operator">;
+      }
+    }</span><span class="flow">
+    return</span><span class="int"> 0</span><span class="operator">;
+}</span><span class="comment">
+
+/**
+    * load_sounds : betölti a hangokat
+    * @return hibajelzés - 0: succes 1: fail
+*/</span><span class="type">
+int</span> load_sounds<span class="operator">(){</span><span class="type">
+   int</span> i<span class="operator">;</span>
+
+   i_sounds<span class="operator">[</span>SOUND_MUSIC<span class="operator">]        =</span> al_load_sample<span class="operator">(</span>GAME_PATH<span class="string"> "sounds/music.ogg"</span><span class="operator">);</span>
+   i_sounds<span class="operator">[</span>SOUND_SELECT<span class="operator">]       =</span> al_load_sample<span class="operator">(</span>GAME_PATH<span class="string"> "sounds/select.ogg"</span><span class="operator">);</span>
+   i_sounds<span class="operator">[</span>SOUND_SUCCES<span class="operator">]       =</span> al_load_sample<span class="operator">(</span>GAME_PATH<span class="string"> "sounds/succes.wav"</span><span class="operator">);</span>
+   i_sounds<span class="operator">[</span>SOUND_FAIL<span class="operator">]         =</span> al_load_sample<span class="operator">(</span>GAME_PATH<span class="string"> "sounds/fail.wav"</span><span class="operator">);</span><span class="flow">
+
+   for</span><span class="operator"> (</span>i<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span> i<span class="operator"> &lt;</span> NUM_SOUNDS<span class="operator">;</span> i<span class="operator">++) {</span><span class="flow">
+      if</span><span class="operator"> (</span>i_sounds<span class="operator">[</span>i<span class="operator">] ==</span> NULL<span class="operator">){</span><span class="type">
+           char</span> _ERROR_<span class="operator">[</span><span class="int">128</span><span class="operator">];</span>
+            sprintf<span class="operator">(</span>_ERROR_<span class="operator">,</span><span class="string"> "error: loading sound - id:%d\n"</span><span class="operator">,</span>i<span class="operator">);</span>
+            ErrorMsg<span class="operator">(</span>_ERROR_<span class="operator">);</span><span class="flow">
+          return</span><span class="int"> 1</span><span class="operator">;
+      }
+   }</span>
+
+   al_play_sample<span class="operator">(</span>i_sounds<span class="operator">[</span>SOUND_MUSIC<span class="operator">],</span><span class="float"> 1.0</span><span class="operator">,</span><span class="float"> 0.0</span><span class="operator">,</span><span class="float"> 1.0</span><span class="operator">,</span>ALLEGRO_PLAYMODE_LOOP<span class="operator">,</span> NULL<span class="operator">);</span><span class="flow">
+   return</span><span class="int"> 0</span><span class="operator">;
+}</span><span class="comment">
+
+/**
+    * init_glow : inicializálja a glow efektet
+    * @return hibajelzés - 0: succes 1: fail
+*/</span><span class="type">
+int</span> init_glow<span class="operator">(){</span>
+   init_images<span class="operator">(&amp;</span>i_glow<span class="operator">,</span> IMG_GLOW<span class="operator">,</span> i_width<span class="operator">,</span> i_height<span class="operator">,</span><span class="float"> 1.0</span><span class="operator">,</span><span class="float"> 1.0</span><span class="operator">);</span>
+   i_glow<span class="operator">.</span>align_y<span class="operator"> =</span><span class="float"> 1.8</span><span class="operator">;</span>
+   i_glow<span class="operator">.</span>r<span class="operator"> =</span> i_glow<span class="operator">.</span>g<span class="operator"> =</span> i_glow<span class="operator">.</span>b<span class="operator"> =</span><span class="float"> 0.0</span><span class="operator">;</span>
+
+   init_images<span class="operator">(&amp;</span>i_glow_overlay<span class="operator">,</span> IMG_GLOW_OVERLAY<span class="operator">,</span><span class="float"> 0.0</span><span class="operator">,</span><span class="float"> 0.0</span><span class="operator">,</span><span class="float"> 1.0</span><span class="operator">,</span><span class="float"> 1.0</span><span class="operator">);</span>
+   i_glow_overlay<span class="operator">.</span>align_x<span class="operator"> =</span><span class="float"> 0.0</span><span class="operator">;</span>
+   i_glow_overlay<span class="operator">.</span>align_y<span class="operator"> =</span><span class="float"> 0.0</span><span class="operator">;</span>
+   i_glow_overlay<span class="operator">.</span>r<span class="operator"> =</span> i_glow_overlay<span class="operator">.</span>g<span class="operator"> =</span> i_glow_overlay<span class="operator">.</span>b<span class="operator"> =</span><span class="float"> 0.0</span><span class="operator">;</span>
+
+   i_glow_color<span class="operator">[</span>PLAYER_1<span class="operator">] =</span> al_map_rgb<span class="operator">(</span><span class="int">0xad</span><span class="operator">,</span><span class="int"> 0xad</span><span class="operator">,</span><span class="int"> 0xad</span><span class="operator">);</span><span class="comment"> /* 0xad, 0xd8, 0x00 */</span>
+   i_glow_color<span class="operator">[</span>PLAYER_2<span class="operator">]  =</span> al_map_rgb<span class="operator">(</span><span class="int">0xff</span><span class="operator">,</span><span class="int"> 0x00</span><span class="operator">,</span><span class="int"> 0x00</span><span class="operator">);</span><span class="flow">
+
+   return</span><span class="int"> 0</span><span class="operator">;
+}</span><span class="comment">
+
+/**
+    * init_menu : inicializálja a menüt és a logot
+    * @return hibajelzés - 0: succes 1: fail
+*/</span><span class="type">
+int</span> init_menu<span class="operator">(){</span>
+   init_images<span class="operator">(&amp;</span>i_title_game<span class="operator">,</span> IMG_TITLE_GAME<span class="operator">,</span> i_width<span class="operator">,</span> i_height<span class="operator">,</span><span class="float"> 1.0</span><span class="operator">,</span><span class="float"> 1.0</span><span class="operator">);</span>
+   i_title_game<span class="operator">.</span>align_y<span class="operator"> =</span><span class="float"> 1.6</span><span class="operator">;</span>
+   i_title_game<span class="operator">.</span>x<span class="operator">=</span><span class="int">1000</span><span class="operator">;</span>
+   i_title_game<span class="operator">.</span>r<span class="operator"> =</span> i_title_game<span class="operator">.</span>g<span class="operator"> =</span> i_title_game<span class="operator">.</span>b<span class="operator"> =</span><span class="float"> 0.0</span><span class="operator">;</span>
+
+   init_images<span class="operator">(&amp;</span>i_title_logo<span class="operator">,</span> IMG_TITLE_LOGO<span class="operator">,</span> i_width<span class="operator">,</span> i_height<span class="operator">,</span><span class="float"> 1.0</span><span class="operator">,</span><span class="float"> 1.0</span><span class="operator">);</span>
+   i_title_logo<span class="operator">.</span>align_y<span class="operator"> =</span><span class="float"> 0.9</span><span class="operator">;</span>
+   i_title_logo<span class="operator">.</span>x<span class="operator">=</span><span class="int">0</span><span class="operator">;</span>
+   i_title_logo<span class="operator">.</span>r<span class="operator"> =</span> i_title_logo<span class="operator">.</span>g<span class="operator"> =</span> i_title_logo<span class="operator">.</span>b<span class="operator"> =</span><span class="float"> 0.0</span><span class="operator">;</span>
+
+
+   init_images<span class="operator">(&amp;</span>i_logo_overlay<span class="operator">,</span> IMG_LOGO<span class="operator">,</span><span class="float"> 0.0</span><span class="operator">,</span><span class="float"> 0.0</span><span class="operator">,</span><span class="float"> 1.0</span><span class="operator">,</span><span class="float"> 1.0</span><span class="operator">);</span>
+   i_logo_overlay<span class="operator">.</span>align_x<span class="operator"> =</span><span class="float"> 0.0</span><span class="operator">;</span>
+   i_logo_overlay<span class="operator">.</span>align_y<span class="operator"> =</span><span class="float"> 0.0</span><span class="operator">;</span>
+   i_logo_overlay<span class="operator">.</span>r<span class="operator"> =</span> i_logo_overlay<span class="operator">.</span>g<span class="operator"> =</span> i_logo_overlay<span class="operator">.</span>b<span class="operator"> =</span><span class="float"> 0.0</span><span class="operator">;</span><span class="flow">
+
+    return</span><span class="int"> 0</span><span class="operator">;
+}</span><span class="comment">
+
+/**
+    * init_font : inicializálja a font-ot
+    * @return hibajelzés - 0: succes 1: fail
+*/</span><span class="type">
+int</span> init_font<span class="operator">(){</span>
+   i_font<span class="operator"> =</span> al_load_font<span class="operator">(</span>GAME_PATH<span class="string"> "fonts/bmpfont.tga"</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">);</span><span class="flow">
+   if</span><span class="operator"> (!</span>i_font<span class="operator">) {</span>
+        ErrorMsg<span class="operator">(</span><span class="string">"error: loading 'fonts/bmpfont.tga'\n"</span><span class="operator">);</span><span class="flow">
+        return</span><span class="int"> 1</span><span class="operator">;
+    }</span><span class="flow">
+
+    return</span><span class="int"> 0</span><span class="operator">;
+}</span><span class="comment">
+
+/**
+    * init_images   : inicializálja a képeket
+    * @param img    : képre mutató pointer
+    * @param image  : betöltendő  kép ID
+    * @param x      : X-tengelyen lévő poziciója
+    * @param y      : X-tengelyen lévő pozitiója
+    * @param scale  : mérete
+    * @param opacity: átlátszóság  1.0f a teljesen telített
+    * @return hibajelzés - 0: succes 1: fail
+*/</span><span class="type">
+int</span> init_images<span class="operator">(</span>Image<span class="operator"> *</span>img<span class="operator">,</span><span class="type"> int</span> image<span class="operator">,</span><span class="type"> float</span> x<span class="operator">,</span><span class="type"> float</span> y<span class="operator">,</span><span class="type"> float</span> scale<span class="operator">,</span><span class="type"> float</span> opacity<span class="operator">){</span><span class="type">
+   int</span> i<span class="operator">;</span>
+
+   img<span class="operator">-&gt;</span>image<span class="operator"> =</span> image<span class="operator">;</span>
+   img<span class="operator">-&gt;</span>x<span class="operator"> =</span> x<span class="operator">;</span>
+   img<span class="operator">-&gt;</span>y<span class="operator"> =</span> y<span class="operator">;</span>
+   img<span class="operator">-&gt;</span>scale_x<span class="operator"> =</span> img<span class="operator">-&gt;</span>scale_y<span class="operator"> =</span> scale<span class="operator">;</span>
+   img<span class="operator">-&gt;</span>align_x<span class="operator"> =</span> img<span class="operator">-&gt;</span>align_y<span class="operator"> =</span><span class="float"> 0.5</span><span class="operator">;</span>
+   img<span class="operator">-&gt;</span>angle<span class="operator"> =</span><span class="float"> 0.0</span><span class="operator">;</span>
+   img<span class="operator">-&gt;</span>r<span class="operator"> =</span> img<span class="operator">-&gt;</span>g<span class="operator"> =</span> img<span class="operator">-&gt;</span>b<span class="operator"> =</span><span class="float"> 1.0</span><span class="operator">;</span>
+   img<span class="operator">-&gt;</span>opacity<span class="operator"> =</span> opacity<span class="operator">;</span><span class="flow">
+
+   for</span><span class="operator"> (</span>i<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span> i<span class="operator"> &lt;</span> MAX_ANIMS<span class="operator">;</span> i<span class="operator">++)</span>
+      img<span class="operator">-&gt;</span>anims<span class="operator">[</span>i<span class="operator">].</span>value<span class="operator"> =</span> NULL<span class="operator">;</span><span class="flow">
+
+      return</span><span class="int"> 0</span><span class="operator">;
+}</span><span class="comment">
+
+/**
+    * switch_img_type : kicserél egy kártyatípust
+    * @param type    : milyen típusra cseréljük a 4. indexű típust
+    * @return nincs
+*/</span><span class="keyword">
+static</span><span class="type"> void</span> switch_img_type<span class="operator">(</span><span class="type">int</span> type<span class="operator">){</span><span class="type">
+    int</span> i<span class="operator">;</span><span class="flow">
+     for</span><span class="operator"> (</span>i<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span> i<span class="operator"> &lt;</span> NUM_CELLS<span class="operator">;</span> i<span class="operator">++)</span><span class="flow">
+            if</span><span class="operator">(</span>i_cards<span class="operator">[</span>i<span class="operator">].</span>id<span class="operator"> ==</span><span class="int"> 4</span><span class="operator">){</span>
+                i_cards<span class="operator">[</span>i<span class="operator">].</span>id<span class="operator">=</span>type<span class="operator">;</span><span class="flow">
+                break</span><span class="operator">;
+            }
+}</span><span class="comment">
+
+/**
+    * init_cards : kártyák inicializálása
+    * @param type  : milyen a játék típusa : NORAML / EXTREM
+    * @return hibajelzés - 0: succes 1: fail
+*/</span><span class="type">
+int</span> init_cards<span class="operator">(</span><span class="type">int</span> type<span class="operator">){</span><span class="keyword">
+   const</span><span class="type"> float</span> card_w<span class="operator"> =</span> i_card_size<span class="operator"> ;</span><span class="keyword">
+   const</span><span class="type"> float</span> card_x<span class="operator"> =</span><span class="int"> 250</span><span class="operator"> +</span> card_w<span class="operator">/</span><span class="float">2.0</span><span class="operator">;</span><span class="keyword">
+   const</span><span class="type"> float</span> card_y<span class="operator"> =</span><span class="int"> 80</span><span class="operator">;</span><span class="type">
+
+   int</span> i<span class="operator">,</span>j<span class="operator">;</span><span class="type">
+   int</span> offsetX<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span><span class="type">
+   int</span> offsetY<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span><span class="type">
+
+   int</span> akt<span class="operator">;</span><span class="type">
+   int</span> exist<span class="operator">=</span><span class="int">1</span><span class="operator">;</span><span class="type">
+   int</span> ids<span class="operator">[</span><span class="int">16</span><span class="operator">];</span>
+
+
+InfoMsg<span class="operator">(</span><span class="string">"CREATING: CARDs\n"</span><span class="operator">);</span><span class="flow">
+   for</span><span class="operator"> (</span>i<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span> i<span class="operator"> &lt;</span> NUM_CELLS<span class="operator">;</span> i<span class="operator">++) {</span><span class="type">
+      int</span> tx<span class="operator"> =</span> i<span class="operator"> %</span> CELL_X<span class="operator">;</span><span class="type">
+      int</span> ty<span class="operator"> =</span> i<span class="operator"> /</span> CELL_X<span class="operator">;</span><span class="type">
+      float</span> px<span class="operator"> =</span> card_x<span class="operator"> +</span> tx<span class="operator"> *</span> card_w<span class="operator">;</span><span class="type">
+      float</span> py<span class="operator"> =</span> card_y<span class="operator"> +</span> ty<span class="operator"> *</span> card_w<span class="operator">;</span>
+
+      i_cards<span class="operator">[</span>i<span class="operator">].</span>status<span class="operator"> =</span> BACK<span class="operator">;</span>
+      i_cards<span class="operator">[</span>i<span class="operator">].</span>x<span class="operator"> =</span> px<span class="operator">+</span>offsetX<span class="operator">*</span><span class="int">10</span><span class="operator">;</span>
+      i_cards<span class="operator">[</span>i<span class="operator">].</span>y<span class="operator"> =</span> py<span class="operator">+</span>offsetY<span class="operator">*</span><span class="int">10</span><span class="operator">;</span>
+      i_cards<span class="operator">[</span>i<span class="operator">].</span>life<span class="operator"> =</span><span class="int"> 1</span><span class="operator">;</span>
+
+
+      init_images<span class="operator">(&amp;</span>i_cards<span class="operator">[</span>i<span class="operator">].</span>back<span class="operator">,</span> IMG_BACK<span class="operator">,</span> px<span class="operator">+</span>offsetX<span class="operator">*</span><span class="int">10</span><span class="operator">,</span> py<span class="operator">+</span>offsetY<span class="operator">*</span><span class="int">10</span><span class="operator">,</span><span class="float"> 1.0</span><span class="operator">,</span><span class="float"> 0.0</span><span class="operator">);</span>
+      init_images<span class="operator">(&amp;</span>i_cards<span class="operator">[</span>i<span class="operator">].</span>front<span class="operator">,</span> IMG_BACK<span class="operator">,</span> px<span class="operator">+</span>offsetX<span class="operator">*</span><span class="int">10</span><span class="operator">,</span> py<span class="operator">+</span>offsetY<span class="operator">*</span><span class="int">10</span><span class="operator">,</span><span class="float"> 1.0</span><span class="operator">,</span><span class="float"> 0.0</span><span class="operator">);</span>
+
+          offsetX<span class="operator">++;</span><span class="flow">
+          if</span><span class="operator">(!((</span>i<span class="operator">+</span><span class="int">1</span><span class="operator">)%</span><span class="int">4</span><span class="operator">)){</span>
+              offsetX<span class="operator">=</span><span class="int">0</span><span class="operator">;</span>
+              offsetY<span class="operator">++;
+          }
+   }</span><span class="flow">
+
+for</span><span class="operator">(</span>i<span class="operator">=</span><span class="int">0</span><span class="operator">;</span>i<span class="operator">&lt;</span><span class="int">16</span><span class="operator">;</span>i<span class="operator">++)</span>ids<span class="operator">[</span>i<span class="operator">]=-</span><span class="int">1</span><span class="operator">;</span>
+
+InfoMsg<span class="operator">(</span><span class="string">"GENEARTING: RANDOM_IDs\n"</span><span class="operator">);</span><span class="flow">
+    for</span><span class="operator">(</span>i<span class="operator">=</span><span class="int">0</span><span class="operator">;</span>i<span class="operator">&lt;</span><span class="int">16</span><span class="operator">;</span>i<span class="operator">++){</span>
+        exist<span class="operator">=</span><span class="int">1</span><span class="operator">;</span><span class="flow">
+        while</span><span class="operator">(</span>exist<span class="operator">){</span>
+         akt<span class="operator">=</span>ids<span class="operator">[</span>i<span class="operator">]=(</span>rand<span class="operator">()%</span><span class="int">16</span><span class="operator">);</span>
+         exist<span class="operator">=</span><span class="int">0</span><span class="operator">;</span><span class="flow">
+         for</span><span class="operator">(</span>j<span class="operator">=</span><span class="int">0</span><span class="operator">;</span>j<span class="operator">&lt;</span>i<span class="operator">;</span>j<span class="operator">++){</span><span class="pre">
+#ifdef DEBUG
+</span>             printf<span class="operator">(</span><span class="string">"%d %d\n"</span><span class="operator">,</span>akt<span class="operator">,</span>ids<span class="operator">[</span>j<span class="operator">]);</span><span class="pre">
+#endif
+</span><span class="flow">         if</span><span class="operator">(</span>akt<span class="operator">==</span>ids<span class="operator">[</span>j<span class="operator">])</span>exist<span class="operator">=</span><span class="int">1</span><span class="operator">;
+         }
+        }
+    }</span><span class="pre">
+
+#ifdef DEBUG
+</span>        printf<span class="operator">(</span><span class="string">"\n\n"</span><span class="operator">);</span><span class="pre">
+#endif
+</span><span class="flow">
+    for</span><span class="operator">(</span>i<span class="operator">=</span><span class="int">0</span><span class="operator">;</span>i<span class="operator">&lt;</span><span class="int">16</span><span class="operator">;</span>i<span class="operator">++){</span><span class="pre">
+#ifdef DEBUG
+</span>        printf<span class="operator">(</span><span class="string">"%d "</span><span class="operator">,</span>ids<span class="operator">[</span>i<span class="operator">]);</span><span class="pre">
+#endif
+</span><span class="flow">        if</span><span class="operator">(</span>ids<span class="operator">[</span>i<span class="operator">]&gt;</span><span class="int">7</span><span class="operator">)</span>ids<span class="operator">[</span>i<span class="operator">]-=</span><span class="int">8</span><span class="operator">;
+    }</span><span class="flow">
+
+
+
+   for</span><span class="operator"> (</span>i<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span> i<span class="operator"> &lt;</span> NUM_CELLS<span class="operator">;</span> i<span class="operator">++)</span>
+       i_cards<span class="operator">[</span>i<span class="operator">].</span>id<span class="operator">=</span>ids<span class="operator">[</span>i<span class="operator">];</span><span class="pre">
+
+
+#ifdef DEBUG
+</span>    printf<span class="operator">(</span><span class="string">"\n----------\n"</span><span class="operator">);</span><span class="flow">
+    for</span><span class="operator">(</span>i<span class="operator">=</span><span class="int">0</span><span class="operator">;</span>i<span class="operator">&lt;</span><span class="int">16</span><span class="operator">;</span>i<span class="operator">++){</span>
+        printf<span class="operator">(</span><span class="string">"%d "</span><span class="operator">,</span>i_cards<span class="operator">[</span>i<span class="operator">].</span>id<span class="operator">);</span><span class="flow">
+        if</span><span class="operator">(!((</span>i<span class="operator">+</span><span class="int">1</span><span class="operator">)%</span><span class="int">4</span><span class="operator">))</span> printf<span class="operator">(</span><span class="string">"\n"</span><span class="operator">);
+    }</span>
+    printf<span class="operator">(</span><span class="string">"\n\n"</span><span class="operator">);</span><span class="pre">
+#endif
+</span><span class="flow">
+
+   if</span><span class="operator">(</span>type<span class="operator">){</span>
+      switch_img_type<span class="operator">(</span>IMG_SZIV<span class="operator">);</span><span class="comment">   /* 8 */</span>
+      switch_img_type<span class="operator">(</span>IMG_HALAL<span class="operator">);</span><span class="comment">  /* 9 */</span><span class="pre">
+
+
+#ifdef DEBUG
+</span>    printf<span class="operator">(</span><span class="string">"\n----------\n"</span><span class="operator">);</span><span class="flow">
+    for</span><span class="operator">(</span>i<span class="operator">=</span><span class="int">0</span><span class="operator">;</span>i<span class="operator">&lt;</span><span class="int">16</span><span class="operator">;</span>i<span class="operator">++){</span>
+        printf<span class="operator">(</span><span class="string">"%d "</span><span class="operator">,</span>i_cards<span class="operator">[</span>i<span class="operator">].</span>id<span class="operator">);</span><span class="flow">
+        if</span><span class="operator">(!((</span>i<span class="operator">+</span><span class="int">1</span><span class="operator">)%</span><span class="int">4</span><span class="operator">))</span> printf<span class="operator">(</span><span class="string">"\n"</span><span class="operator">);
+    }</span>
+    printf<span class="operator">(</span><span class="string">"\n\n"</span><span class="operator">);</span><span class="pre">
+#endif
+</span><span class="operator">
+   }</span><span class="flow">
+
+    return</span><span class="int"> 0</span><span class="operator">;
+}</span>
+
+</pre>
+
+
+</body></html>

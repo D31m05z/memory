@@ -1,0 +1,243 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>BME-VIK-MI</title>
+<link href="bme-vik-mi.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+body {
+	background-color: #444;
+}
+</style>
+</head>
+
+<body>
+
+
+
+<div class="content">
+  
+<h1 class="header">.Megvalósítások</h1>
+<h1 class="header">[ main.c ] main(...){...}</h1>
+<ul>
+  <li>  A program a main fügvénynél lép be, ami tartalmazza a beérkező paramétereket:<br>
+    <span class="kiemelt">argc</span> megadja hány paramétert adtunk át a programnak, <span class="kiemelt">argv</span>-meg tartalmazza a paramétereket mint karakterszting.<br>
+    A paraméterek átadása azért fontos, mert itt kérjük be a játékosok nevét.
+    <br>
+  </li>
+</ul>
+<p class="source">int main(int argc, char *argv[]){<br>
+...<br>
+return 0; <br>
+}</p>
+<p>&nbsp;</p>
+<ul>
+  <li>Belépés után beállítjuk az alapértelemett beállításokat és létrehozzuk az elemeket. <br>
+    Itt inicializáljuk a paramétereinket. Megadjuk a kezdő állapotot, ami a MENU.<br>
+    Betöltjük a képeket és hangokat. Létrehozzuk a font bitmap-et, ami a szöveg megjelenítéséhez fog kelleni.
+  </li>
+</ul>
+<p class="source">i_game_status = MENU;<br>
+  <br>
+init_system    ();<br>
+init_render();<br>
+load_images();<br>
+load_sounds();<br>
+init_glow();<br>
+init_menu();<br>
+init_font(); <br>
+</p>
+<p>&nbsp;</p>
+<ul>
+  <li>    Felvesszük a kezdő állapotot az intró megkezdéséhez.<br>
+    Itt állítjuk be a menü animációt kezdő állapotba.  </li>
+</ul>
+<p class="source">start_about();</p>
+<p>&nbsp;</p>
+<ul>
+  <li>Ezt követően  installáljuk az Allegro fügvényeket, amiket a játék során használunk, illetve regisztráljuk őket.
+    ( Ez nem mind, az inicializálási résznél is vannak ilyen parancsok pl. a hang fügvények beépítésénél. )<br>
+    Erre azért van szügésgünk, hogy az Allegro tudja, hogy milyen fügvényeket kell neki majd használnia, illetve hogy az Allegro ezeket a fünkciókat inicializálja.<br>
+    Az Allegro segítségével számolom az időt.
+    ( Megtehettem volna a time.h fügvényeivel is.)<br>
+  </li>
+</ul>
+<p class="source">al_install_keyboard();<br>
+al_install_mouse();<br>
+al_register_event_source(...);<br>
+al_start_timer(...);</p>
+<p>&nbsp;</p>
+<ul>
+  <li>Végűl megadjuk a fő ciklust, ahonnan csak akkor térünk ki, ha ki szeretnénk lépni a játékból. Kilépés után következnek a felszabadítások, amiket az Allegro  autómatikusan végez el, mi csak a fügvényt hívjuk meg.<br>
+  </li>
+</ul>
+<p class="source">main_loop(...);<br>
+al_destroy_font(...);</p>
+<p>&nbsp;</p>
+<h1 class="header">[ main.c ] main_loop(...){...}</h1>
+<p>Ez a fő ciklusunk, ez a program magja. Ebben található egy végtelen ciklus, amiből akkor lépünk ki ,ha a <span class="kiemelt">done</span> feltétel igaz lesz.<br>
+  <br>
+Akkor frissítjük a képernyőt, ha az időzítő a megadott FPS-ben igazra állítja a <span class="kiemelt">redraw</span> értékét.<br>
+FPS = Frame Per Secund<br>
+redraw = újrarajzolás, aminek az értékét minden razolás után hamisra állítunk. Majd az időzítő a megadott FPS-re igazra állítja.</p>
+<ul>
+  <li>Rajzolásért felelős fügvények a fő ciklusban.<br>
+    Itt választjuk ketté a menüt és a játék jeleneteket.<br>
+  </li>
+  </ul>
+<p class="source">if(i_game_status == GAME){<br>
+draw_screen();<br>
+update_status();<br>
+}else if(i_game_status == MENU){<br>
+draw_menu();<br>
+}</p>
+<p>&nbsp;</p>
+<ul>
+  <li>Beérkező események az inputról.</li>
+</ul>
+<p class="source">switch(event.type){<br>
+case ESEMENY_NEVE:<br>
+... <br>
+}</p>
+<p>&nbsp;</p>
+<h1 class="header">[ init.c ]</h1>
+<p>Tartalmazza az inicializáláshoz tartozó fügvényeket.</p>
+<ul>
+  <li>Betölti a játékhoz szükséges képeket/hangokat.<br>
+  </li>
+  </ul>
+<p class="source">load_images(); <br>
+load_sounds(); </p>
+<p>&nbsp;</p>
+<ul>
+  <li>Generálja a pályát, az egész játékban ez a leglényegesebb rész.
+    <ul>
+      <li>A pálya jelen esetben 4X4-es, mivel 8-8 kép pár található a játékban. Késöbbiekben ez bővíthető, a program dinamikus ilyen téren.  </li>
+      <li>A képpárok beállítása úgy történik, hogy veszünk egy 16 elemű egész típust tartalmazó tömböt, ami tárolni fog 0-tól 17-ig random számokat. ( <span class="kiemelt">int ids[16]</span> )<br>
+        A random számok meghatározásánál figyelni kell, hogy ne legyen ismétlődő elem, azaz 0-17-ig minden elem egyszer szerepeljen!<br>
+        1. Azt tételezzük fel, hogy már szerepelt az elem, ezért bemegyünk a while ciklusba és addig generálunk számokat míg nem találunk egy olyat, ami még nem szerepelt.
+        </li>
+      </ul>
+  </li>
+</ul><blockquote>
+    <p class="source">for(i=0;i&lt;16;i++){ </p>
+    <blockquote>
+        <p class="source">exist=1;<br>
+          <br>
+        while(exist){<br>
+        akt=ids[i]=(rand()%16);<br>
+        exist=0;<br>
+        for(j=0;j&lt;i;j++)<br>
+        if(akt==ids[j])exist=1;<br>}</p>
+    </blockquote>
+    <p class="source">        } </p>
+  </blockquote>
+</p>
+<ul>
+  <ul>
+    <li>A létrehozott azonosítókat úgy manipupáljuk, hogy ha az aktuális azonosító nagyobb 7-nél, akkor vonjunk ki belőle 8-at, ha így végigmegyünk a tömbön, kapni fogunk egy olyan 16 elemű tömböt, amiben 0-7-ig szám párok találhatóak. Így megvan a 8-8 kép pár azonosítója. Az egyező kép azonosítók a párok.</li>
+  </ul>
+</ul>
+<p class="source">for(i=0;i&lt;16;i++) 
+if(ids[i]&gt;7)ids[i]-=8;<br>
+</p>
+<p>&nbsp;</p>
+<h1 class="header">[ Events.c ]</h1>
+<p>Szerkezeti felépítése hasonló az iRSoftware - ENGINE belsejéhez, persze át lett írva ANSI-C-re. ( elhagytam az osztályokat )</p>
+<ul>
+  <li>Ez tartalmazza az eseményekre reagáló fügvényeket. Itt kerül feldolgozásra az egér mozgatás/kattintás </li>
+  <li>A  kártyák állapotának változtatása : fel/le fordításuk.
+    <ul>
+      <li>Vizsgálni kell, hogy ha kattintunk az egérrel van-e alattunk kártya, ha igen fordítsuk fel, ha még nem volt felfordítva.</li>
+    </ul>
+  </li>
+  </ul>
+<h1 class="header">[ Animation.c ]</h1>
+<p>Effektek és átmenetek megvalósítása.</p>
+<p>&nbsp;</p>
+<h1 class="header">[ Engine.c ]</h1>
+<p>A játék történéseit tartalmazza. Itt kerül feldolgozásra, játékosok váltása, a kártyák állapotának vizsgálata, párok keresése, pontozás.</p>
+<ul>
+  <li>Játék kezdése, kezdő értékek beállítása, pálya generáló fügvény meghívása.</li>
+  </ul>
+<p class="source">void reset(int type){...}</p>
+<p>&nbsp;</p>
+<ul>
+  <li>Felfordított kártyák vizsgálata, hogy pár volt-e vagy sem.
+    <ul>
+      <li>Végig kell menni a kártyákon és meg kell vizsgálni, hogy fel van-e fordítva az épp vizsgált kártya.</li>
+      <li>Ha igen akkor egy másik ciklus keres még egy kártyát ami ezen kívűl is fel van fordítva. Biztos lesz ilyen, ugyanis a check fügvény csak akkor hívódik meg, ha a felfordított kártyák száma 2<br>
+( <span class="kiemelt">if (i_front_count == 2)</span> )</li>
+      <li>Ez után a két felfordított kártyának az azonosítóját (<span class="kiemelt"> card[akt].id</span> ) vizsgáljuk, és ha egyezik akkor az aktuális játékos pontszámát növeljük ( <span class="kiemelt">i_players[i_actual_player].score++;</span> )</li>
+      <li>Ellentkező esetben játékost váltunk <br>
+        (<span class="kiemelt"> i_actual_player=!i_actual_player;
+        change_player(...); </span>)</li>
+      </ul>
+  </li>
+</ul>
+<p class="source">  static void check(){</p>
+<h5 class="source">  int i,j;<br>
+  for (i = 0; i &lt; NUM_CELLS-1; i++){<br>
+  if(i_cards[i].status==FRONT){<br>
+  for (j = i+1; j &lt; NUM_CELLS; j++){<br>
+  if(i_cards[j].status==FRONT){</h5>
+<h5 class="source">
+  <blockquote>
+    <p>      if(i_cards[i].id==i_cards[j].id){<br>
+i_cards[i].life=0;                        <br>
+      i_cards[j].life=0;<br>
+      i_players[i_actual_player].score++;<br>
+      i_found++;<br>
+      }else{<br>
+      i_actual_player=!i_actual_player;<br>
+      change_player(...);<br>
+      }</p>
+  </blockquote>
+</h5>
+<h5 class="source">  }}}}}</h5>
+<p>&nbsp;</p>
+<ul>
+  <li>Állapotok frissítése.
+    <ul>
+      <li>Ha két kártyát felfordítottunk, akkor mentsük el az épp aktuális időt és hozzá képest 1 másodpercig legyenek láthatóak.</li>
+      <li>Vizsgáljuk a speciális kártyákat: szív / halál
+        <ul>
+          <li>szív esetén kapunk 1 pontot és még nézhetünk 2 kártyát</li>
+          <li>halál-fej esetén levon 1 pontot és a következő játékos jön</li>
+          </ul>
+        </li>
+      </ul>
+  </li>
+</ul>
+<h5 class="source">void update_status(){<br>
+  static float save_time;<br>
+static int saved=0;<br>
+<br>
+if(i_front_count==2 || i_sziv || i_halal ){<br>
+if(!saved)<br>
+save_time=i_time;<br>
+saved=1;<br>
+}else saved = 0;<br>
+<br>
+if(((save_time+1)&lt;i_time) &amp;&amp; (saved || i_sziv || i_halal )) {<br>
+...<br>
+}
+<br>
+}<br>
+</h5>
+<p>&nbsp;</p>
+<h1 class="header">[ Renderer.c ]</h1>
+<p>Tartalmazza a jelenetek rajzolásáért felelős fügvényeket. Itt található a menü illetve maga a pálya kirajzolásának algoritmusai.</p>
+<h1 class="header">[ Platform.c ]</h1>
+<p>Mivel a projekt meg lett csinálva Linux , Windows, MacOSX alá, ezért gondoltam maradok a régi szokásomnál, és itt is bevezetem a Platform fájlt ami tartalmazza az egyéb eltéréseket az OS-ek között.</p>
+<p>Linux alatt az üzenet ablakokat gtk-val valósítottam meg.<br>
+  Mac alatt <span class="kiemelt">StandardAlert(...);</span> fügvény végzi az ilyen hívásokat.<br>
+Win alatt
+<span class="kiemelt">MessageBoxA(...);</span></p>
+<p>Tartalmazza még a rendszer szintű deklarációkat. Ilyen például az <span class="kiemelt"><br>
+  enum {SUCCES,FAIL};</span></p>
+<p>Illetve a típusdefiniciók egy részét, amik szintén változhatnak OS-ek között.</p>
+</div>
+
+</body>
+</html>

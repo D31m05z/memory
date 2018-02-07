@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>C++ code colored by C++2HTML</title>
+<meta name="generator" content="C++2HTML by Jasper Bedaux">
+<!-- To generate your own colored code visit http://www.bedaux.net/cpp2html/ -->
+<style type="text/css">
+.comment { color: #999999; font-style: italic; }
+.pre { color: #000099; }
+.string { color: #009900; }
+.char { color: #009900; }
+.float { color: #996600; }
+.int { color: #999900; }
+.bool { color: #000000; font-weight: bold; }
+.type { color: #FF6633; }
+.flow { color: #FF0000; }
+.keyword { color: #990000; }
+.operator { color: #663300; font-weight: bold; }
+.operator { color: #663300; font-weight: bold; }
+</style>
+</head>
+<body>
+<pre><span class="comment">
+/** * * * BME-VIK-MI_2011_10_17 * * *|1.NHF|* * * * * * * * * *\
+*    _ _____   _____        __ _                              *
+*   (_)  __ \ / ____|      / _| |                             *
+*   |_| |__)| (___    ___ | |_| |___      ____ _ _ __ ___     *
+*   | |  _  / \___ \ / _ \|  _| __\ \ /\ / / _` | '__/ _ \    *
+*   | | | \ \ ____) | (_) | | | |_ \ V  V / (_| | | |  __/    *
+*   |_|_|  \_\_____/ \___/|_|  \__| \_/\_/ \__,_|_|  \___|    *
+*                                                             *
+*                   http://irsoftware.co.cc                   *
+*                                                             *
+*              contact_adress: sk8Geri@gmail.com               *
+*                                                               *
+*       This file is a part of the work done by aFagylaltos.     *
+*         You are free to use the code in any way you like,      *
+*         modified, unmodified or copied into your own work.     *
+*        However, I would like you to consider the following:    *
+*                                                               *
+*  -If you use this file and its contents unmodified,         *
+*              or use a major part of this file,               *
+*     please credit the author and leave this note untouched.   *
+*  -If you want to use anything in this file commercially,      *
+*                please request my approval.                    *
+*                                                              *
+\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */</span><span class="pre">
+
+#include "Platform.h"
+
+#if defined(_WIN32)
+</span><span class="type">
+void</span> ErrorMsg<span class="operator">(</span><span class="keyword">const</span><span class="type"> char</span><span class="operator"> *</span>string<span class="operator">){</span>
+	MessageBoxA<span class="operator">(</span>NULL<span class="operator">,</span> string<span class="operator">,</span><span class="string"> "Error"</span><span class="operator">,</span> MB_OK<span class="operator"> |</span> MB_ICONERROR<span class="operator">);</span>
+	printf<span class="operator">(</span><span class="string">"LOG: %s"</span><span class="operator">,</span>string<span class="operator">);
+}</span><span class="type">
+
+void</span> WarningMsg<span class="operator">(</span><span class="keyword">const</span><span class="type"> char</span><span class="operator"> *</span>string<span class="operator">){</span>
+	MessageBoxA<span class="operator">(</span>NULL<span class="operator">,</span> string<span class="operator">,</span><span class="string"> "Warning"</span><span class="operator">,</span> MB_OK<span class="operator"> |</span> MB_ICONWARNING<span class="operator">);
+}</span><span class="type">
+
+void</span> InfoMsg<span class="operator">(</span><span class="keyword">const</span><span class="type"> char</span><span class="operator"> *</span>string<span class="operator">){</span><span class="pre">
+#ifdef DEBUG
+</span>	MessageBoxA<span class="operator">(</span>NULL<span class="operator">,</span> string<span class="operator">,</span><span class="string"> "Information"</span><span class="operator">,</span> MB_OK<span class="operator"> |</span> MB_ICONINFORMATION<span class="operator">);</span><span class="pre">
+#endif
+</span>	printf<span class="operator">(</span>string<span class="operator">);
+}</span><span class="pre">
+
+#elif defined(LINUX)
+</span><span class="comment">
+/* hack, legutóbb így ment */</span>
+gboolean idle<span class="operator">(</span>gpointer data<span class="operator">){</span>
+	gtk_main_quit<span class="operator">();</span><span class="flow">
+	return</span> FALSE<span class="operator">;
+}</span><span class="type">
+
+void</span> MessageBox<span class="operator">(</span><span class="keyword">const</span><span class="type"> char</span><span class="operator"> *</span>string<span class="operator">,</span><span class="keyword"> const</span> GtkMessageType msgType<span class="operator">){</span>
+	GtkWidget<span class="operator"> *</span>dialog<span class="operator"> =</span> gtk_message_dialog_new<span class="operator">(</span>NULL<span class="operator">,</span> GTK_DIALOG_DESTROY_WITH_PARENT<span class="operator">,</span> msgType<span class="operator">,</span> GTK_BUTTONS_OK<span class="operator">,</span> string<span class="operator">);</span>
+	gtk_dialog_run<span class="operator">(</span>GTK_DIALOG<span class="operator">(</span>dialog<span class="operator">));</span>
+	gtk_widget_destroy<span class="operator">(</span>dialog<span class="operator">);</span>
+	g_idle_add<span class="operator">(</span>idle<span class="operator">,</span> NULL<span class="operator">);</span>
+	gtk_main<span class="operator">();
+}</span><span class="type">
+
+void</span> ErrorMsg<span class="operator">(</span><span class="keyword">const</span><span class="type"> char</span><span class="operator"> *</span>string<span class="operator">){</span>
+	MessageBox<span class="operator">(</span>string<span class="operator">,</span> GTK_MESSAGE_ERROR<span class="operator">);</span>
+	printf<span class="operator">(</span><span class="string">"LOG: %s"</span><span class="operator">,</span>string<span class="operator">);
+}</span><span class="type">
+
+void</span> WarningMsg<span class="operator">(</span><span class="keyword">const</span><span class="type"> char</span><span class="operator"> *</span>string<span class="operator">){</span>
+	MessageBox<span class="operator">(</span>string<span class="operator">,</span> GTK_MESSAGE_WARNING<span class="operator">);
+}</span><span class="type">
+
+void</span> InfoMsg<span class="operator">(</span><span class="keyword">const</span><span class="type"> char</span><span class="operator"> *</span>string<span class="operator">){</span><span class="pre">
+#ifdef DEBUG
+</span>     MessageBox<span class="operator">(</span>string<span class="operator">,</span> GTK_MESSAGE_INFO<span class="operator">);</span><span class="pre">
+#endif
+</span>	printf<span class="operator">(</span>string<span class="operator">);
+}</span><span class="pre">
+
+#elif defined(__APPLE__)
+</span><span class="type">
+void</span> ErrorMsg<span class="operator">(</span><span class="keyword">const</span><span class="type"> char</span><span class="operator"> *</span>string<span class="operator">){</span>
+	Str255 msg<span class="operator">;</span>
+	c2pstrcpy<span class="operator">(</span>msg<span class="operator">,</span> string<span class="operator">);</span>
+
+	SInt16 ret<span class="operator">;</span>
+	StandardAlert<span class="operator">(</span>kAlertStopAlert<span class="operator">,</span> msg<span class="operator">,</span> NULL<span class="operator">,</span> NULL<span class="operator">, &amp;</span>ret<span class="operator">);</span>
+    printf<span class="operator">(</span><span class="string">"LOG: %s"</span><span class="operator">,</span>string<span class="operator">);
+}</span><span class="type">
+
+void</span> WarningMsg<span class="operator">(</span><span class="keyword">const</span><span class="type"> char</span><span class="operator"> *</span>string<span class="operator">){</span>
+	Str255 msg<span class="operator">;</span>
+	c2pstrcpy<span class="operator">(</span>msg<span class="operator">,</span> string<span class="operator">);</span>
+
+	SInt16 ret<span class="operator">;</span>
+	StandardAlert<span class="operator">(</span>kAlertCautionAlert<span class="operator">,</span> msg<span class="operator">,</span> NULL<span class="operator">,</span> NULL<span class="operator">, &amp;</span>ret<span class="operator">);
+}</span><span class="type">
+
+void</span> InfoMsg<span class="operator">(</span><span class="keyword">const</span><span class="type"> char</span><span class="operator"> *</span>string<span class="operator">){</span>
+	Str255 msg<span class="operator">;</span>
+	c2pstrcpy<span class="operator">(</span>msg<span class="operator">,</span> string<span class="operator">);</span><span class="pre">
+
+#ifdef DEBUG
+</span>	SInt16 ret<span class="operator">;</span>
+	StandardAlert<span class="operator">(</span>kAlertNoteAlert<span class="operator">,</span> msg<span class="operator">,</span> NULL<span class="operator">,</span> NULL<span class="operator">, &amp;</span>ret<span class="operator">);</span><span class="pre">
+#endif
+</span>	printf<span class="operator">(</span>string<span class="operator">);
+}</span><span class="pre">
+
+#endif
+</span></pre>
+
+
+</body></html>

@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>BME-VIK-MI</title>
+<link href="bme-vik-mi.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+body {
+	background-color: #444;
+}
+</style>
+</head>
+
+<body>
+
+<div class="content">
+  
+<h1 class="header">.Játékról</h1>
+<table width="200" border="0">
+  <tr>
+    <td align="center"><strong><a href="#"><img src="../images/download.png" width="128" height="128"></a></strong></td>
+    </tr>
+  <tr>
+    <td align="center"><strong>LETÖLTÉS</strong></td>
+    </tr>
+</table>
+  <p>A program grafikusan ábrázol elénk egy 4x4-es pályát kártyákból.
+      Minden képből kettő darab van. A játék során a kártyákat 
+      lefelé fordítjuk és a soron következő játékos kettő darab lapot fordíthat fel
+      egyszerre. Ha párt talált elviheti a lapokat és kap 1 pontot, továbbá    húzhat megint kettő kártyát. Ellenben ha nem talált képpárt, akkor az
+    ellenfél játékos következik ...  </p>
+<p><img src="images/menu.png" width="594" height="362"></p>
+    <p><img src="images/00.jpg" width="128" height="128"> <img src="images/01.jpg" width="128" height="128"> <img src="images/02.jpg" width="128" height="128"> <img src="images/03.jpg" width="128" height="128"><br>
+    <img src="images/04.jpg" width="128" height="128">    <img src="images/05.jpg" width="128" height="128"> <img src="images/06.jpg" width="128" height="128"> <img src="images/07.jpg" width="128" height="128"><br>
+    </p>
+    <h2>Extrák</h2>
+    <p>A játékosok nevét módunk van megadni. A két fél játékos nevét a rogram paraméterként veszi át. Íme egy példa: ./start név1 név2</p>
+    <p> Lehetőségünk van választani normál illetve extrém mód között:<br>
+      A normál mód a megszokott memoria játéknak felel meg.
+      Az extrém módban találkozhatunk szivecskével és bombával a játék során.    <br>
+      A szivecske ad egy plusz pontot és eltűnik a pályáról.<br>
+      A bomba levon egy pontot ( negatívba nem lehet menni )
+    és nem tűnik el a pályáról, azaz figyelnünk kell, nehogy megint belenyúljunk!    </p>
+    <p><img src="images/sziv.jpg" width="128" height="128"> <img src="images/halal.jpg" alt="" width="128" height="128"></p>
+<h3>Felépítés</h3>
+    <p>Igyekeztem logikusan felépíteni a kódot és a környezetet.<br>
+      Környezet alatt értendő a base mappában található fájlok elrendezése.<br>
+    könyvtárfa:</p>
+    <ul>
+      <li> - tartalmazza a menüben és játék közben látható glow effekteket<br>
+        <em>[ base/effects ]</em>    </li>
+    </ul>
+    <ul>
+      <li>        -      bitmap font ,egyszerű ASCII tábla<br>
+        - feldologázáért az Allegro a felelős  <br>
+        <em>[ base/fonts ]</em>    </li>
+    </ul>
+    <ul>
+      <li>        - itt találhatóak a kép párok
+        <br>
+        <em>[ base/images ] </em></li>
+    </ul>
+    <ul>
+      <li>        - 
+         menü és az engine logója<br>
+        <em>[ base/logo ] </em></li>
+    </ul>
+    <ul>
+      <li>        - a játék során hallható hangok<br>
+        <em>[ base/sounds
+        ]</em></li>
+    </ul>
+<p> Az Allegro egy platform független segédkönyvtár. Rengeteg fügvényt tartalmaz és beépülő modulokat. Ezek segítségével tudtam megcsinálni grafikusan a játékot.</p>
+    <ul>
+      <li>
+        Felhasználom az Allegro képbetöltőjét, ami *.jpg tömörített képeket is képes feldolgozni. ( libjpeg csomag szükséges hozzá)   <br>
+      { <span class="kiemelt">al_load_bitmap( &quot;filename.jpg&quot; );</span> }<br>
+      <br>
+      </li>
+      <li> Használom a hangkezelő fügvényeket, amik *.ogg,*.wav hangfájlokat is képesek lejátszani. <br>
+        { <span class="kiemelt">al_load_sample( &quot;filename.ogg&quot;);</span> } <br>
+          <br>
+      </li>
+      <li> Igénybe vettem a bemeneti eszközök lekérését: egér,billentyű <br>
+      { <span class="kiemelt">X11</span> és <span class="kiemelt">Xevent</span> }<br>
+      { <span class="kiemelt">ALLEGRO_EVENT event;</span> } <br>
+      <br>
+      </li>
+      <li>Végűl a szöveg megjelenítéséhez a beépített bitmap font technológiára épüló fügvényeket használom.<br>
+        Azért tga, mert ez tartalmaz alpha csatornát, ami előnyös ez esetben.
+        <br>
+      { <span class="kiemelt">al_load_font(&quot;filename.tga&quot;);</span>} </li>
+    </ul>
+  <p>&nbsp;</p>
+    <p>Mivel platform független az összes beépülő modulom, ezért a csomag tartalmazza  a legelterjetebb operációs rendszereken futtatható binary-kat.<br>
+    A <em>[ bin ]</em> mappában található:</p>
+    <ul>
+      <li>Linux alatt : 
+        <ul>
+          <li>start-release_codeblocks</li>
+          <li>start-debug_codeblocks</li>
+          <li>start-make</li></ul>
+      </li>
+      <li>Windows alatt :
+        <ul>
+          <li>start-release-v8.exe</li>
+          <li>start-debug_v8.exe</li>
+          <li>start-release-v10.exe</li>
+          <li>start-debug-v10.exe</li>
+        </ul>
+      </li>
+      <li>Mac OSX : 
+        <ul>
+          <li>start-osx</li>
+        </ul>
+      </li>
+    </ul>
+    <p>Linux alatt teljes mértékben tesztelve lett.<br>
+      Windows és Mac alatt csak VMWare virtuális gépeket lett tesztelve.<br>
+      Virtuális OSX alatt az ablakozó nem működött, mert sajnos nem tudtam grafikus drivert működésre bírni vmware alatt, de a kód szépen lefordúlt Xcode IDE környezettel ...    </p>
+<h4>Developer - források</h4>
+    <p>A játék forráskódja az <em>[ src ] </em>mappában található.<br>
+    Projekt fájlok az alábbi mappákban találhatóak: </p>
+    <ul>
+      <li><em>[ codeblocks ]</em></li>
+      <li><em>[ make ]</em></li>
+      <li><em>[ vc10 ]</em></li>
+      <li><em>[ vc8 ]</em></li>
+    </ul>
+    <p>Található egy <em>[ support ] </em>mappa is a csomagban, amiben a platformokhoz tartozó szükségletek vannak.</p>
+<h4>Segédletek</h4>
+    <p>A házifeladat megoldására felhasználtam az Allegro-t, amit az infoc oldalon engedélyeztek, hogy lehet használni. Továbbá az ehez tartozó tutorialokat böngésztem át. Mindezek segítették ,hogy megszülessen ez a grafikus memory játék, egyébként sima konzolos lett volna, de szerencsére időben utánajártam az Allegro működésének.</p>
+    <p><img src="images/normal_game.png" width="594" height="362"></p>
+    
+   
+<!-- end .container --></div>  
+</body>
+</html>

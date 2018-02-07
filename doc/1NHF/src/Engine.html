@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>C++ code colored by C++2HTML</title>
+<meta name="generator" content="C++2HTML by Jasper Bedaux">
+<!-- To generate your own colored code visit http://www.bedaux.net/cpp2html/ -->
+<style type="text/css">
+.comment { color: #999999; font-style: italic; }
+.pre { color: #000099; }
+.string { color: #009900; }
+.char { color: #009900; }
+.float { color: #996600; }
+.int { color: #999900; }
+.bool { color: #000000; font-weight: bold; }
+.type { color: #FF6633; }
+.flow { color: #FF0000; }
+.keyword { color: #990000; }
+.operator { color: #663300; font-weight: bold; }
+.operator { color: #663300; font-weight: bold; }
+</style>
+</head>
+<body>
+<pre><span class="comment">
+/** * * * BME-VIK-MI_2011_10_17 * * *|1.NHF|* * * * * * * * * *\
+*    _ _____   _____        __ _                              *
+*   (_)  __ \ / ____|      / _| |                             *
+*   |_| |__)| (___    ___ | |_| |___      ____ _ _ __ ___     *
+*   | |  _  / \___ \ / _ \|  _| __\ \ /\ / / _` | '__/ _ \    *
+*   | | | \ \ ____) | (_) | | | |_ \ V  V / (_| | | |  __/    *
+*   |_|_|  \_\_____/ \___/|_|  \__| \_/\_/ \__,_|_|  \___|    *
+*                                                             *
+*                   http://irsoftware.co.cc                   *
+*                                                             *
+*              contact_adress: sk8Geri@gmail.com               *
+*                                                               *
+*       This file is a part of the work done by aFagylaltos.     *
+*         You are free to use the code in any way you like,      *
+*         modified, unmodified or copied into your own work.     *
+*        However, I would like you to consider the following:    *
+*                                                               *
+*  -If you use this file and its contents unmodified,         *
+*              or use a major part of this file,               *
+*     please credit the author and leave this note untouched.   *
+*  -If you want to use anything in this file commercially,      *
+*                please request my approval.                    *
+*                                                              *
+\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */</span><span class="pre">
+
+#include "Engine.h"
+#include "Init.h"
+</span><span class="comment">
+/**
+    * find_id : megkeres nekünk egy azonosítot
+    * @param type : megadja milyen típusu kártyát keresünk.
+    * @return visszatér az keresett tömbben lévő index számmal
+*/</span><span class="keyword">
+static</span><span class="type"> int</span> find_id<span class="operator">(</span><span class="type">int</span> type<span class="operator">){</span><span class="type">
+    int</span> i<span class="operator">;</span><span class="flow">
+        for</span><span class="operator"> (</span>i<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span> i<span class="operator"> &lt;</span> NUM_CELLS<span class="operator">;</span> i<span class="operator">++)</span><span class="flow">
+            if</span><span class="operator">(</span>i_cards<span class="operator">[</span>i<span class="operator">].</span>id<span class="operator"> ==</span> type<span class="operator">)</span><span class="flow"> return</span> i<span class="operator">;</span><span class="flow">
+
+    return</span><span class="operator"> -</span><span class="int">1</span><span class="operator">;
+}</span><span class="comment">
+
+/**
+    * check : megnézi volt-e pár
+    * @return nincs
+*/</span><span class="keyword">
+static</span><span class="type"> void</span> check<span class="operator">(){</span><span class="type">
+    int</span> i<span class="operator">,</span>j<span class="operator">;</span><span class="flow">
+       for</span><span class="operator"> (</span>i<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span> i<span class="operator"> &lt;</span> NUM_CELLS<span class="operator">-</span><span class="int">1</span><span class="operator">;</span> i<span class="operator">++){</span><span class="flow">
+            if</span><span class="operator">(</span>i_cards<span class="operator">[</span>i<span class="operator">].</span>status<span class="operator">==</span>FRONT<span class="operator">){</span><span class="flow">
+                for</span><span class="operator"> (</span>j<span class="operator"> =</span> i<span class="operator">+</span><span class="int">1</span><span class="operator">;</span> j<span class="operator"> &lt;</span> NUM_CELLS<span class="operator">;</span> j<span class="operator">++){</span><span class="flow">
+                    if</span><span class="operator">(</span>i_cards<span class="operator">[</span>j<span class="operator">].</span>status<span class="operator">==</span>FRONT<span class="operator">){</span><span class="flow">
+                        if</span><span class="operator">(</span>i_cards<span class="operator">[</span>i<span class="operator">].</span>id<span class="operator">==</span>i_cards<span class="operator">[</span>j<span class="operator">].</span>id<span class="operator">){</span>
+
+                            i_cards<span class="operator">[</span>i<span class="operator">].</span>life<span class="operator">=</span><span class="int">0</span><span class="operator">;</span>
+                            i_cards<span class="operator">[</span>j<span class="operator">].</span>life<span class="operator">=</span><span class="int">0</span><span class="operator">;</span><span class="pre">
+#ifdef SOUND
+</span>                            al_play_sample<span class="operator">(</span>i_sounds<span class="operator">[</span>SOUND_SUCCES<span class="operator">],</span><span class="float"> 0.7</span><span class="operator">,</span><span class="float"> 0.0</span><span class="operator">,</span><span class="float"> 1.0</span><span class="operator">,</span> ALLEGRO_PLAYMODE_ONCE<span class="operator">,</span> NULL<span class="operator">);</span><span class="pre">
+#endif
+</span>                            i_players<span class="operator">[</span>i_actual_player<span class="operator">].</span>score<span class="operator">++;</span>
+                            i_found<span class="operator">++;
+                        }</span><span class="flow">else</span><span class="operator">{</span><span class="pre">
+#ifdef SOUND
+</span>                            al_play_sample<span class="operator">(</span>i_sounds<span class="operator">[</span>SOUND_FAIL<span class="operator">],</span><span class="float"> 0.2</span><span class="operator">,</span><span class="float"> 0.0</span><span class="operator">,</span><span class="float"> 1.0</span><span class="operator">,</span> ALLEGRO_PLAYMODE_ONCE<span class="operator">,</span> NULL<span class="operator">);</span><span class="pre">
+#endif
+</span>                            i_actual_player<span class="operator">=!</span>i_actual_player<span class="operator">;</span>
+                            change_player<span class="operator">(</span>i_actual_player<span class="operator">,</span>i_actual_player<span class="operator"> ?</span><span class="int"> 900</span><span class="operator"> :</span><span class="int"> 0</span><span class="operator">);
+                        }
+                    }
+                }
+            }
+       }
+}</span><span class="comment">
+
+/**
+    * update_status : Frissíti a játék állapotát
+    * @return nincs
+*/</span><span class="type">
+void</span> update_status<span class="operator">(){</span><span class="keyword">
+    static</span><span class="type"> float</span> save_time<span class="operator">;</span><span class="keyword">
+    static</span><span class="type"> int</span> saved<span class="operator">=</span><span class="int">0</span><span class="operator">;</span><span class="flow">
+
+    if</span><span class="operator">(</span>i_front_count<span class="operator">==</span><span class="int">2</span><span class="operator"> ||</span> i_sziv<span class="operator"> ||</span> i_halal<span class="operator"> ){</span><span class="flow">
+        if</span><span class="operator">(!</span>saved<span class="operator">)</span>
+        save_time<span class="operator">=</span>i_time<span class="operator">;</span>
+        saved<span class="operator">=</span><span class="int">1</span><span class="operator">;
+    }</span><span class="flow">else</span> saved<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span><span class="flow">
+
+    if</span><span class="operator">(((</span>save_time<span class="operator">+</span><span class="int">1</span><span class="operator">)&lt;</span>i_time<span class="operator">) &amp;&amp; (</span>saved<span class="operator"> ||</span> i_sziv<span class="operator"> ||</span> i_halal<span class="operator"> )) {</span><span class="flow">
+        if</span><span class="operator">(</span>i_sziv<span class="operator">){</span>
+            i_sziv<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span>
+            unselect_card<span class="operator">(&amp;</span>i_cards<span class="operator">[</span>find_id<span class="operator">((</span>IMG_SZIV<span class="operator">))]);
+        }</span><span class="flow">else</span><span class="operator">{</span>
+            check<span class="operator">();</span>
+            unselect_all_cards<span class="operator">();</span>
+            i_round<span class="operator">++;
+        }</span><span class="flow">
+
+        if</span><span class="operator">(</span>i_halal<span class="operator">){</span>
+            i_actual_player<span class="operator">=!</span>i_actual_player<span class="operator">;</span>
+            change_player<span class="operator">(</span>i_actual_player<span class="operator">,</span>i_actual_player<span class="operator"> ?</span><span class="int"> 900</span><span class="operator"> :</span><span class="int"> 0</span><span class="operator">);</span>
+            i_halal<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;
+        }
+    }
+}</span><span class="comment">
+
+/**
+    * process_extrem : extrém esetek feldolgozása
+    * @param type : Bekéri a kártya típusát
+    * @return nincs
+*/</span><span class="type">
+void</span> process_extrem<span class="operator">(</span><span class="type">int</span> type<span class="operator">){</span><span class="flow">
+    switch</span><span class="operator">(</span>type<span class="operator">){</span><span class="flow">
+        case</span> IMG_SZIV<span class="operator">:</span><span class="pre">
+#ifdef SOUND
+</span>            al_play_sample<span class="operator">(</span>i_sounds<span class="operator">[</span>SOUND_SUCCES<span class="operator">],</span><span class="float"> 0.7</span><span class="operator">,</span><span class="float"> 0.0</span><span class="operator">,</span><span class="float"> 1.0</span><span class="operator">,</span> ALLEGRO_PLAYMODE_ONCE<span class="operator">,</span> NULL<span class="operator">);</span><span class="pre">
+#endif
+</span>            i_players<span class="operator">[</span>i_actual_player<span class="operator">].</span>score<span class="operator">++;</span>
+            i_cards<span class="operator">[</span>find_id<span class="operator">((</span>IMG_SZIV<span class="operator">))].</span>life<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span>
+            i_sziv<span class="operator"> =</span><span class="int"> 1</span><span class="operator">;</span><span class="flow">
+
+            break</span><span class="operator">;</span><span class="flow">
+        case</span> IMG_HALAL<span class="operator">:</span><span class="pre">
+#ifdef SOUND
+</span>            al_play_sample<span class="operator">(</span>i_sounds<span class="operator">[</span>SOUND_FAIL<span class="operator">],</span><span class="float"> 0.2</span><span class="operator">,</span><span class="float"> 0.0</span><span class="operator">,</span><span class="float"> 1.0</span><span class="operator">,</span> ALLEGRO_PLAYMODE_ONCE<span class="operator">,</span> NULL<span class="operator">);</span><span class="pre">
+#endif
+</span><span class="flow">            if</span><span class="operator">(</span>i_players<span class="operator">[</span>i_actual_player<span class="operator">].</span>score<span class="operator"> !=</span><span class="int"> 0</span><span class="operator">)</span>
+                i_players<span class="operator">[</span>i_actual_player<span class="operator">].</span>score<span class="operator">--;</span><span class="flow">
+
+            if</span><span class="operator">(</span>i_front_count<span class="operator"> ==</span><span class="int"> 1</span><span class="operator">)</span>
+                i_halal<span class="operator"> =</span><span class="int"> 1</span><span class="operator">;</span><span class="flow">
+
+            break</span><span class="operator">;
+    }
+}</span><span class="comment">
+
+/**
+    * reset : kezdő állapot
+    * @param type : Bekéri a játék típusát
+    * @return nincs
+*/</span><span class="type">
+void</span> reset<span class="operator">(</span><span class="type">int</span> type<span class="operator">){</span><span class="type">
+    int</span> i<span class="operator">;</span>
+
+    i_players<span class="operator">[</span><span class="int">0</span><span class="operator">].</span>score<span class="operator">=</span><span class="int">0</span><span class="operator">;</span>
+    i_players<span class="operator">[</span><span class="int">1</span><span class="operator">].</span>score<span class="operator">=</span><span class="int">0</span><span class="operator">;</span>
+
+    i_found<span class="operator">=</span><span class="int">0</span><span class="operator">;</span>
+    i_round<span class="operator">=</span><span class="int">0</span><span class="operator">;</span>
+    i_front_count<span class="operator">=</span><span class="int">0</span><span class="operator">;</span>
+
+    i_actual_player<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span>
+
+    init_cards<span class="operator">(</span>type<span class="operator">);</span>
+    change_player<span class="operator">(</span>i_actual_player<span class="operator">,</span><span class="int"> 0</span><span class="operator">);</span><span class="flow">
+
+    for</span><span class="operator"> (</span>i<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span> i<span class="operator"> &lt;</span> NUM_CELLS<span class="operator">;</span> i<span class="operator">++) {</span>
+        animation<span class="operator">(&amp;</span>i_cards<span class="operator">[</span>i<span class="operator">].</span>back<span class="operator">, &amp;</span>i_cards<span class="operator">[</span>i<span class="operator">].</span>back<span class="operator">.</span>opacity<span class="operator">,</span><span class="float"> 0.7</span><span class="operator">,</span><span class="float"> 2.0</span><span class="operator">);
+    }
+}</span><span class="comment">
+
+/**
+    * start_about : menü kezdő állapota
+    * @return nincs
+*/</span><span class="type">
+void</span> start_about<span class="operator">(){</span>
+   i_title_game<span class="operator">.</span>x<span class="operator">=</span><span class="int">1000</span><span class="operator">;</span>
+
+   i_col<span class="operator"> =</span> al_map_rgb<span class="operator">(</span><span class="int">0xaf</span><span class="operator">,</span><span class="int"> 0xaf</span><span class="operator">,</span><span class="int"> 0xaf</span><span class="operator">);</span>
+
+   animation_color<span class="operator">(&amp;</span>i_title_game<span class="operator">,</span> i_col<span class="operator">,</span><span class="float"> 1.0</span><span class="operator">);</span>
+   animation<span class="operator">(&amp;</span>i_title_game<span class="operator">, &amp;</span>i_title_game<span class="operator">.</span>x<span class="operator">,</span><span class="int"> 200</span><span class="operator">,</span><span class="float"> 1.0</span><span class="operator">);</span>
+
+   i_title_logo<span class="operator">.</span>x<span class="operator">=</span><span class="int">0</span><span class="operator">;</span>
+   animation_color<span class="operator">(&amp;</span>i_title_logo<span class="operator">,</span> i_col<span class="operator">,</span><span class="float"> 1.0</span><span class="operator">);</span>
+   animation<span class="operator">(&amp;</span>i_title_logo<span class="operator">, &amp;</span>i_title_logo<span class="operator">.</span>x<span class="operator">,</span><span class="int"> 800</span><span class="operator">,</span><span class="float"> 1.0</span><span class="operator">);</span>
+
+   animation_color<span class="operator">(&amp;</span>i_logo_overlay<span class="operator">,</span> i_col<span class="operator">,</span><span class="float"> 1.0</span><span class="operator">);</span>
+   animation<span class="operator">(&amp;</span>i_logo_overlay<span class="operator">, &amp;</span>i_logo_overlay<span class="operator">.</span>opacity<span class="operator">,</span><span class="float">1.0</span><span class="operator">,</span><span class="float"> 4.0</span><span class="operator">);
+}</span><span class="comment">
+
+/**
+    * change_player : játékost vált
+    * @param type : szín tömb indexének száma
+    * @param x    : hova tolja el az efektet
+    * @return nincs
+*/</span><span class="type">
+void</span> change_player<span class="operator">(</span><span class="type">int</span> type<span class="operator">,</span><span class="type"> float</span> x<span class="operator">){</span>
+   animation_color<span class="operator">(&amp;</span>i_glow<span class="operator">,</span> i_glow_color<span class="operator">[</span>type<span class="operator">],</span><span class="float"> 1.0</span><span class="operator">);</span>
+   animation<span class="operator">(&amp;</span>i_glow<span class="operator">, &amp;</span>i_glow<span class="operator">.</span>x<span class="operator">,</span> x<span class="operator">,</span><span class="float"> 1.0</span><span class="operator">);</span>
+
+   animation_color<span class="operator">(&amp;</span>i_glow_overlay<span class="operator">,</span> i_glow_color<span class="operator">[</span>type<span class="operator">],</span><span class="float"> 1.0</span><span class="operator">);</span>
+   animation<span class="operator">(&amp;</span>i_glow_overlay<span class="operator">, &amp;</span>i_glow_overlay<span class="operator">.</span>opacity<span class="operator">,</span><span class="float">1.0</span><span class="operator">,</span><span class="float"> 4.0</span><span class="operator">);
+}</span>
+</pre>
+
+
+</body></html>

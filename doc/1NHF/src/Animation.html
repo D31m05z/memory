@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>C++ code colored by C++2HTML</title>
+<meta name="generator" content="C++2HTML by Jasper Bedaux">
+<!-- To generate your own colored code visit http://www.bedaux.net/cpp2html/ -->
+<style type="text/css">
+.comment { color: #999999; font-style: italic; }
+.pre { color: #000099; }
+.string { color: #009900; }
+.char { color: #009900; }
+.float { color: #996600; }
+.int { color: #999900; }
+.bool { color: #000000; font-weight: bold; }
+.type { color: #FF6633; }
+.flow { color: #FF0000; }
+.keyword { color: #990000; }
+.operator { color: #663300; font-weight: bold; }
+.operator { color: #663300; font-weight: bold; }
+</style>
+</head>
+<body>
+<pre><span class="comment">
+/** * * * BME-VIK-MI_2011_10_17 * * *|1.NHF|* * * * * * * * * *\
+*    _ _____   _____        __ _                              *
+*   (_)  __ \ / ____|      / _| |                             *
+*   |_| |__)| (___    ___ | |_| |___      ____ _ _ __ ___     *
+*   | |  _  / \___ \ / _ \|  _| __\ \ /\ / / _` | '__/ _ \    *
+*   | | | \ \ ____) | (_) | | | |_ \ V  V / (_| | | |  __/    *
+*   |_|_|  \_\_____/ \___/|_|  \__| \_/\_/ \__,_|_|  \___|    *
+*                                                             *
+*                   http://irsoftware.co.cc                   *
+*                                                             *
+*              contact_adress: sk8Geri@gmail.com               *
+*                                                               *
+*       This file is a part of the work done by aFagylaltos.     *
+*         You are free to use the code in any way you like,      *
+*         modified, unmodified or copied into your own work.     *
+*        However, I would like you to consider the following:    *
+*                                                               *
+*  -If you use this file and its contents unmodified,         *
+*              or use a major part of this file,               *
+*     please credit the author and leave this note untouched.   *
+*  -If you want to use anything in this file commercially,      *
+*                please request my approval.                    *
+*                                                              *
+\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */</span><span class="pre">
+
+#include "Platform.h"
+#include "Engine.h"
+</span><span class="comment">
+/**
+    * next_animation : következő animációra lépés
+    * @param img : Az animálni kívánt kép
+    * @return következő animció, amit végre kell hajtani
+*/</span><span class="keyword">
+static</span> Anim<span class="operator"> *</span>next_animation<span class="operator">(</span>Image<span class="operator"> *</span>img<span class="operator">){</span><span class="type">
+   unsigned</span> i<span class="operator">;</span><span class="flow">
+
+   for</span><span class="operator"> (</span>i<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span> i<span class="operator"> &lt;</span> MAX_ANIMS<span class="operator">;</span> i<span class="operator">++) {</span><span class="flow">
+      if</span><span class="operator"> (</span>img<span class="operator">-&gt;</span>anims<span class="operator">[</span>i<span class="operator">].</span>value<span class="operator"> ==</span> NULL<span class="operator">)</span><span class="flow">
+         return</span><span class="operator"> &amp;</span>img<span class="operator">-&gt;</span>anims<span class="operator">[</span>i<span class="operator">];
+   }</span><span class="flow">
+   return</span> NULL<span class="operator">;
+}</span><span class="comment">
+
+/**
+    * null_all_animations : kinullázza az animációban található értéket!
+    * Ez jelzi, hogy még nem volt , és még szerepelnie kell!
+    * @param img  : nullázni kívánt kép, ami tartalmazza a hozzá kapcsolódó animációkat
+    * @param value : érték
+    * @param s_time : kezdeti idő
+    * @param s_value : kezdő érték
+    * @return nincs
+*/</span><span class="keyword">
+static</span><span class="type"> void</span> null_all_animations<span class="operator">(</span>Image<span class="operator"> *</span>img<span class="operator">,</span><span class="type"> float</span><span class="operator"> *</span>value<span class="operator">,</span><span class="type"> float</span> s_time<span class="operator">,</span><span class="type">float</span> s_value<span class="operator">){</span><span class="type">
+   unsigned</span> i<span class="operator">;</span><span class="flow">
+
+   for</span><span class="operator"> (</span>i<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span> i<span class="operator"> &lt;</span> MAX_ANIMS<span class="operator">;</span> i<span class="operator">++) {</span>
+      Anim<span class="operator"> *</span>anim<span class="operator"> = &amp;</span>img<span class="operator">-&gt;</span>anims<span class="operator">[</span>i<span class="operator">];</span><span class="flow">
+
+      if</span><span class="operator"> (</span>anim<span class="operator">-&gt;</span>value<span class="operator"> !=</span> value<span class="operator">)</span><span class="flow">
+         continue</span><span class="operator">;</span><span class="flow">
+
+      if</span><span class="operator"> (</span>anim<span class="operator">-&gt;</span>e_time<span class="operator"> &gt;</span> s_time<span class="operator">) {</span>
+         anim<span class="operator">-&gt;</span>e_time<span class="operator"> =</span> s_time<span class="operator">;</span>
+         anim<span class="operator">-&gt;</span>e_value<span class="operator"> =</span> s_value<span class="operator">;
+      }</span><span class="flow">
+
+      if</span><span class="operator"> (</span>anim<span class="operator">-&gt;</span>s_time<span class="operator"> &gt;=</span> s_time<span class="operator"> ||</span>
+         anim<span class="operator">-&gt;</span>s_time<span class="operator"> &gt;=</span> anim<span class="operator">-&gt;</span>e_time<span class="operator">)
+      {</span>
+         img<span class="operator">-&gt;</span>anims<span class="operator">[</span>i<span class="operator">].</span>value<span class="operator"> =</span> NULL<span class="operator">;
+      }
+   }
+}</span><span class="comment">
+
+/**
+    * animation : animáció kezelő fv.
+    * Itt történik meg az animáció kezdetbeni kinullázása, hogy tudjuk, még nem szerepelt.
+    * Itt történik a képhez tartozó animációk feldolgozása
+    * @param img  : nullázni kívánt kép, ami tartalmazza a hozzá kapcsolódó animációkat
+    * @param value : érték
+    * @param e_value : végső érték, amibe megyünk
+    * @param duration : mennyi idő alatt történjen meg az animáció
+    * @return nincs
+*/</span><span class="type">
+void</span> animation<span class="operator">(</span>Image<span class="operator"> *</span>img<span class="operator">,</span><span class="type"> float</span><span class="operator"> *</span>value<span class="operator">,</span><span class="type"> float</span> e_value<span class="operator">,</span><span class="type"> float</span> duration<span class="operator">){</span><span class="type">
+   float</span> s_time<span class="operator"> =</span> al_get_time<span class="operator">() ;</span>
+   Anim<span class="operator"> *</span>anim<span class="operator">;</span>
+
+
+   null_all_animations<span class="operator">(</span>img<span class="operator">,</span> value<span class="operator">,</span> s_time<span class="operator">, *</span>value<span class="operator">);</span>
+
+   anim<span class="operator"> =</span> next_animation<span class="operator">(</span>img<span class="operator">);</span>
+   anim<span class="operator">-&gt;</span>value<span class="operator"> =</span> value<span class="operator">;</span>
+   anim<span class="operator">-&gt;</span>s_value<span class="operator"> = *</span>value<span class="operator">;</span>
+   anim<span class="operator">-&gt;</span>e_value<span class="operator"> =</span> e_value<span class="operator">;</span>
+   anim<span class="operator">-&gt;</span>s_time<span class="operator"> =</span> s_time<span class="operator">;</span>
+   anim<span class="operator">-&gt;</span>e_time<span class="operator"> =</span> s_time<span class="operator"> +</span> duration<span class="operator">;
+}</span><span class="comment">
+/**
+    * animation_color : szinek animálásáért felelős fv.
+    * @param img  : animálni kívánt kép
+    * @param color : milyen színbe akarunk menni
+    * @param duration : mennyi idő alatt történjen meg az animáció
+    * @return nincs
+*/</span><span class="type">
+void</span> animation_color<span class="operator">(</span>Image<span class="operator"> *</span>img<span class="operator">,</span><span class="keyword"> const</span> ALLEGRO_COLOR color<span class="operator">,</span><span class="type"> float</span> duration<span class="operator">){</span><span class="type">
+   float</span> r<span class="operator">,</span> g<span class="operator">,</span> b<span class="operator">;</span>
+
+   al_unmap_rgb_f<span class="operator">(</span>color<span class="operator">, &amp;</span>r<span class="operator">, &amp;</span>g<span class="operator">, &amp;</span>b<span class="operator">);</span>
+
+   animation<span class="operator">(</span>img<span class="operator">, &amp;</span>img<span class="operator">-&gt;</span>r<span class="operator">,</span> r<span class="operator">,</span>duration<span class="operator">);</span>
+   animation<span class="operator">(</span>img<span class="operator">, &amp;</span>img<span class="operator">-&gt;</span>g<span class="operator">,</span> g<span class="operator">,</span>duration<span class="operator">);</span>
+   animation<span class="operator">(</span>img<span class="operator">, &amp;</span>img<span class="operator">-&gt;</span>b<span class="operator">,</span> b<span class="operator">,</span>duration<span class="operator">);
+}</span><span class="comment">
+
+/**
+    * update_anim : animációk fő feldolgozása, frissítése, lejátszása
+    * @param anim  : aktuális animáció, amit épp feldolgozunk/lejátszunk
+    * @param now : aktuális idő, kell hogy meg tudjuk állapítani mennyi idő telt el!
+    * @return nincs
+*/</span><span class="keyword">
+static</span><span class="type"> void</span> update_anim<span class="operator">(</span>Anim<span class="operator"> *</span>anim<span class="operator">,</span><span class="type"> float</span> now<span class="operator">){</span><span class="type">
+   float</span> dt<span class="operator">,</span> t<span class="operator">,</span> range<span class="operator">;</span><span class="flow">
+
+   if</span><span class="operator"> (!</span>anim<span class="operator">-&gt;</span>value<span class="operator">)</span><span class="flow">
+      return</span><span class="operator">;</span><span class="flow">
+
+   if</span><span class="operator"> (</span>now<span class="operator"> &lt;</span> anim<span class="operator">-&gt;</span>s_time<span class="operator">)</span><span class="flow">
+      return</span><span class="operator">;</span>
+
+   dt<span class="operator"> =</span> now<span class="operator"> -</span> anim<span class="operator">-&gt;</span>s_time<span class="operator">;</span>
+   t<span class="operator"> =</span> dt<span class="operator"> / (</span>anim<span class="operator">-&gt;</span>e_time<span class="operator"> -</span> anim<span class="operator">-&gt;</span>s_time<span class="operator">);</span><span class="flow">
+
+   if</span><span class="operator"> (</span>t<span class="operator"> &gt;=</span><span class="float"> 1.0</span><span class="operator">) {
+      *</span>anim<span class="operator">-&gt;</span>value<span class="operator"> =</span> anim<span class="operator">-&gt;</span>e_value<span class="operator">;</span>
+      anim<span class="operator">-&gt;</span>value<span class="operator"> =</span> NULL<span class="operator">;</span><span class="flow">
+      return</span><span class="operator">;
+   }</span>
+
+   range<span class="operator"> =</span> anim<span class="operator">-&gt;</span>e_value<span class="operator"> -</span> anim<span class="operator">-&gt;</span>s_value<span class="operator">;
+   *</span>anim<span class="operator">-&gt;</span>value<span class="operator"> =</span> anim<span class="operator">-&gt;</span>s_value<span class="operator"> + -</span>t<span class="operator">*(</span>t<span class="operator">-</span><span class="int">2</span><span class="operator">) *</span> range<span class="operator">;
+}</span><span class="comment">
+
+/**
+    * update_image_anims : képekhez tartozó animációk feldolgozása
+    * @param img  : aktuális animáció, amit épp elküldünk feldolgozni/lejátszani
+    * @param now : aktuális idő, kell hogy meg tudjuk állapítani mennyi idő telt el!
+    * @return nincs
+*/</span><span class="keyword">
+static</span><span class="type"> void</span> update_image_anims<span class="operator">(</span>Image<span class="operator"> *</span>img<span class="operator">,</span><span class="type"> float</span> now<span class="operator">){</span><span class="type">
+   int</span> i<span class="operator">;</span><span class="flow">
+
+   for</span><span class="operator"> (</span>i<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span> i<span class="operator"> &lt;</span> MAX_ANIMS<span class="operator">;</span> i<span class="operator">++)</span>
+      update_anim<span class="operator">(&amp;</span>img<span class="operator">-&gt;</span>anims<span class="operator">[</span>i<span class="operator">],</span> now<span class="operator">);
+}</span><span class="comment">
+
+/**
+    * update_card_anims : kép-párok-hoz tartozó animációk, kártya eleje/hátúlja
+    * kártya felfordítása/lefordítása, pár találása , kártyák kijelölése animációk
+    * @param card  : aktuális animáció, amit épp elküldünk feldolgozni/lejátszani
+    * @param now : aktuális idő, kell hogy meg tudjuk állapítani mennyi idő telt el!
+    * @return nincs
+*/</span><span class="keyword">
+static</span><span class="type"> void</span> update_card_anims<span class="operator">(</span>Card<span class="operator"> *</span>card<span class="operator">,</span><span class="type"> float</span> now<span class="operator">){</span>
+   update_image_anims<span class="operator">(&amp;</span>card<span class="operator">-&gt;</span>back<span class="operator">,</span> now<span class="operator">);</span>
+   update_image_anims<span class="operator">(&amp;</span>card<span class="operator">-&gt;</span>front<span class="operator">,</span> now<span class="operator">);
+}</span><span class="comment">
+
+/**
+    * animation_updates : Fő animációs ciklus beindító fv.
+    * Itt adjuk meg az animációk frissítéseit, és átadjuk az aktuális időt.
+    * main_loop fv. hívja meg a rajzolás előtt!
+    * @param now : aktuális idő, kell hogy meg tudjuk állapítani mennyi idő telt el!
+    * @return nincs
+*/</span><span class="type">
+void</span> animation_updates<span class="operator">(</span><span class="type">float</span> now<span class="operator">){</span><span class="type">
+   int</span> i<span class="operator">;</span><span class="comment">
+
+/* --- cards --- */</span><span class="flow">
+
+   for</span><span class="operator"> (</span>i<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span> i<span class="operator"> &lt;</span> NUM_CELLS<span class="operator">;</span> i<span class="operator">++)</span>
+      update_card_anims<span class="operator">(&amp;</span>i_cards<span class="operator">[</span>i<span class="operator">],</span> now<span class="operator">);</span><span class="comment">
+
+/* --- game --- */</span>
+
+   update_image_anims<span class="operator">(&amp;</span>i_glow<span class="operator">,</span> now<span class="operator">);</span>
+   update_image_anims<span class="operator">(&amp;</span>i_glow_overlay<span class="operator">,</span> now<span class="operator">);</span><span class="comment">
+
+/* --- menu --- */</span>
+
+   update_image_anims<span class="operator">(&amp;</span>i_title_game<span class="operator">,</span>now<span class="operator">);</span>
+   update_image_anims<span class="operator">(&amp;</span>i_title_logo<span class="operator">,</span>now<span class="operator">);</span>
+   update_image_anims<span class="operator">(&amp;</span>i_logo_overlay<span class="operator">,</span>now<span class="operator">);
+}</span>
+</pre>
+
+
+</body></html>

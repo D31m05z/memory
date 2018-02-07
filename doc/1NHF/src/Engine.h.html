@@ -1,0 +1,204 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>C++ code colored by C++2HTML</title>
+<meta name="generator" content="C++2HTML by Jasper Bedaux">
+<!-- To generate your own colored code visit http://www.bedaux.net/cpp2html/ -->
+<style type="text/css">
+.comment { color: #999999; font-style: italic; }
+.pre { color: #000099; }
+.string { color: #009900; }
+.char { color: #009900; }
+.float { color: #996600; }
+.int { color: #999900; }
+.bool { color: #000000; font-weight: bold; }
+.type { color: #FF6633; }
+.flow { color: #FF0000; }
+.keyword { color: #990000; }
+.operator { color: #663300; font-weight: bold; }
+.operator { color: #663300; font-weight: bold; }
+</style>
+</head>
+<body>
+<pre><span class="comment">
+/** * * * BME-VIK-MI_2011_10_17 * * *|1.NHF|* * * * * * * * * *\
+*    _ _____   _____        __ _                              *
+*   (_)  __ \ / ____|      / _| |                             *
+*   |_| |__)| (___    ___ | |_| |___      ____ _ _ __ ___     *
+*   | |  _  / \___ \ / _ \|  _| __\ \ /\ / / _` | '__/ _ \    *
+*   | | | \ \ ____) | (_) | | | |_ \ V  V / (_| | | |  __/    *
+*   |_|_|  \_\_____/ \___/|_|  \__| \_/\_/ \__,_|_|  \___|    *
+*                                                             *
+*                   http://irsoftware.co.cc                   *
+*                                                             *
+*              contact_adress: sk8Geri@gmail.com               *
+*                                                               *
+*       This file is a part of the work done by aFagylaltos.     *
+*         You are free to use the code in any way you like,      *
+*         modified, unmodified or copied into your own work.     *
+*        However, I would like you to consider the following:    *
+*                                                               *
+*  -If you use this file and its contents unmodified,         *
+*              or use a major part of this file,               *
+*     please credit the author and leave this note untouched.   *
+*  -If you want to use anything in this file commercially,      *
+*                please request my approval.                    *
+*                                                              *
+\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */</span><span class="pre">
+
+#ifndef _ENGINE_H_
+#define _ENGINE_H_
+
+#include "Platform.h"
+#include &lt;stdio.h&gt;
+</span><span class="keyword">
+typedef struct</span> Player Player<span class="operator">;</span><span class="keyword">
+typedef struct</span> Anim Anim<span class="operator">;</span><span class="keyword">
+typedef struct</span> Card Card<span class="operator">;</span><span class="keyword">
+typedef struct</span> Image Image<span class="operator">;</span><span class="comment">
+
+/* játék típusa */</span><span class="keyword">
+enum</span><span class="operator"> {</span>
+    NORMAL<span class="operator">,</span>
+    EXTREM<span class="operator">
+};</span><span class="comment">
+
+/* Játék állapota */</span><span class="keyword">
+enum</span><span class="operator"> {</span>
+  MENU<span class="operator">,</span>
+  GAME<span class="operator">,</span>
+  EXIT<span class="operator">
+};</span><span class="comment">
+
+/* Kártyák állapota */</span><span class="keyword">
+enum</span><span class="operator">  {</span>
+    BACK<span class="operator">,</span><span class="comment">           /* Le van fordítva, azaz a hátulját látjuk */</span>
+    FRONT<span class="comment">           /* Fel van fordítva */</span><span class="operator">
+};</span><span class="comment">
+
+/* Játékosok [ ez a későbiekben fontos, ha akarunk 3 játékos üzemmódot írni hozzá! ] */</span><span class="keyword">
+enum</span><span class="operator"> {</span>
+   PLAYER_1<span class="operator">,</span>
+   PLAYER_2<span class="operator">,</span>
+   NUM_PLAYERS<span class="operator">
+};</span><span class="keyword">
+
+struct</span> Player<span class="operator"> {</span><span class="type">
+    int</span> score<span class="operator">;</span><span class="comment">      /* elért pontok a játék során */</span><span class="type">
+    char</span><span class="operator"> *</span>name<span class="operator">;</span><span class="comment">     /* játékos neve */</span><span class="operator">
+};</span><span class="comment">
+
+/* Pálya 4x4-es */</span><span class="keyword">
+enum</span><span class="operator"> {</span>
+   CELL_X<span class="operator">    =</span><span class="int"> 4</span><span class="operator">,</span>
+   CELL_Y<span class="operator">    =</span><span class="int"> 4</span><span class="operator">,</span>
+   NUM_CELLS<span class="operator">  =</span> CELL_X<span class="operator"> *</span> CELL_Y<span class="operator">
+};</span><span class="comment">
+
+/* ///////////////////////////////////////////////// */</span><span class="keyword">
+
+struct</span> Anim<span class="operator"> {</span><span class="type">
+   float</span><span class="operator">       *</span>value<span class="operator">;</span><span class="type">
+   float</span>       s_value<span class="operator">;</span><span class="comment">      /* start value */</span><span class="type">
+   float</span>       e_value<span class="operator">;</span><span class="comment">      /* end value */</span><span class="type">
+   float</span>       s_time<span class="operator">;</span><span class="comment">       /* start time */</span><span class="type">
+   float</span>       e_time<span class="operator">;</span><span class="comment">       /* end time */</span><span class="operator">
+};</span><span class="keyword">
+
+struct</span> Image<span class="operator"> {</span><span class="type">
+   unsigned</span>    image<span class="operator">;</span><span class="type">
+   float</span>       x<span class="operator">,</span> scale_x<span class="operator">,</span> align_x<span class="operator">;</span><span class="type">
+   float</span>       y<span class="operator">,</span> scale_y<span class="operator">,</span> align_y<span class="operator">;</span><span class="type">
+   float</span>       angle<span class="operator">;</span><span class="type">
+   float</span>       r<span class="operator">,</span> g<span class="operator">,</span> b<span class="operator">;</span><span class="type">
+   float</span>       opacity<span class="operator">;</span>
+   Anim        anims<span class="operator">[</span>MAX_ANIMS<span class="operator">];
+};</span><span class="comment">
+/* ///////////////////////////////////////////////// */
+
+/*  Kártya */</span><span class="keyword">
+struct</span> Card<span class="operator"> {</span><span class="type">
+   unsigned</span>    status<span class="operator">;</span><span class="comment">      /* A kártya helyzete BACK vagy FRONT */</span><span class="type">
+   float</span>       x<span class="operator">;</span><span class="comment">           /* A kártya helye */</span><span class="type">
+   float</span>       y<span class="operator">;</span>
+   Image       back<span class="operator">;</span><span class="comment">         /* kártya hátulja   : textúra */</span>
+   Image       front<span class="operator">;</span><span class="comment">        /* kártya eleje : textúra */</span><span class="type">
+   unsigned</span>    id<span class="operator">;</span><span class="comment">          /* kártya azonosító id: 0-7 ig 8 db kártya van a játékban */</span><span class="type">
+   unsigned</span>    life<span class="operator">;</span><span class="comment">        /* kártya élete, azaz hogy megtalálták-e már a párját avagy sem */</span><span class="operator">
+};</span><span class="comment">
+
+/* ----Scene--------------------- */</span>
+Card<span class="operator">           *</span>i_hover_card<span class="operator">;</span>
+Card           i_cards<span class="operator">[</span>NUM_CELLS<span class="operator">];</span><span class="comment">   /* kártyák */
+/* ------------------------------ */
+
+/* ----Effects------------------- */</span>
+Image          i_glow<span class="operator">;</span>
+Image          i_glow_overlay<span class="operator">;</span>
+ALLEGRO_COLOR  i_glow_color<span class="operator">[</span>NUM_PLAYERS<span class="operator">];</span>
+ALLEGRO_COLOR  i_col<span class="operator">;</span><span class="comment">							/* szinek a menuhoz*/</span>
+
+Image          i_title_game<span class="operator">;</span>
+Image          i_title_logo<span class="operator">;</span>
+Image          i_logo_overlay<span class="operator">;</span><span class="comment">
+/* ------------------------------ */
+
+/* ----Player-------------------- */</span>
+Player          i_players<span class="operator">[</span>NUM_PLAYERS<span class="operator">];</span><span class="comment">     /* játékosok */</span><span class="type">
+int</span>             i_actual_player<span class="operator">;</span><span class="comment">            /* aktuális játékos : jelen esetben vagy 0 vagy 1 */
+/* ------------------------------ */
+
+/* ----Game---------------------- */</span><span class="type">
+float</span>           i_time<span class="operator">;</span><span class="comment">                     /* eltelt idő */</span><span class="type">
+int</span>             i_front_count<span class="operator">;</span><span class="comment">              /* hány kártya van felfordítva, ha kettő akkor már megnéztünk egy párt */</span><span class="type">
+int</span>             i_round<span class="operator">;</span><span class="comment">                    /* hány kör ment le */</span><span class="type">
+int</span>             i_found<span class="operator">;</span><span class="comment">                    /* hány pár ment ki már */</span><span class="type">
+int</span>             i_game_status<span class="operator">;</span><span class="comment">              /* játék állapota */</span><span class="type">
+int</span>             i_game_type<span class="operator">;</span><span class="comment">                /* játék típusa */</span><span class="type">
+int</span>             i_sziv<span class="operator">;</span><span class="comment">                     /* szivet találtunk */</span><span class="type">
+int</span>             i_halal<span class="operator">;</span><span class="comment">                    /* halál mezőre léptünk */
+/* ------------------------------ */
+
+/* ----Display------------------- */</span><span class="type">
+int</span>             i_width<span class="operator">;</span><span class="comment">                    /* ablak szélessége */</span><span class="type">
+int</span>             i_height<span class="operator">;</span><span class="comment">                   /* ablak magassága */</span><span class="type">
+float</span>           i_card_size<span class="operator">;</span><span class="comment">                /* kártya mérete */</span><span class="type">
+float</span>           i_refresh_rate<span class="operator">;</span><span class="comment">             /* ablak frissítése FPS-ben : Frame per Sec */</span>
+
+ALLEGRO_EVENT_QUEUE<span class="operator"> *</span>i_queue<span class="operator">;</span>
+ALLEGRO_DISPLAY<span class="operator">		*</span>i_display<span class="operator">;</span><span class="comment">             /* ablak */</span>
+ALLEGRO_TIMER<span class="operator">		*</span>i_refresh_timer<span class="operator">;</span><span class="comment">       /* frissítési időzitő */
+/* ------------------------------ */
+
+
+/* /////ANIMATION////////////////// */</span><span class="type">
+void</span> animation<span class="operator">(</span>Image<span class="operator"> *</span>img<span class="operator">,</span><span class="type"> float</span><span class="operator"> *</span>value<span class="operator">,</span><span class="type"> float</span> e_value<span class="operator">,</span><span class="type"> float</span> duration<span class="operator">);</span><span class="type">
+void</span> animation_color<span class="operator">(</span>Image<span class="operator"> *</span>img<span class="operator">,</span><span class="keyword"> const</span> ALLEGRO_COLOR color<span class="operator">,</span><span class="type"> float</span> duration<span class="operator">);</span><span class="type">
+void</span> animation_updates<span class="operator">(</span><span class="type">float</span> now<span class="operator">);</span><span class="type">
+
+int</span> init_images<span class="operator">(</span>Image<span class="operator"> *</span>img<span class="operator">,</span><span class="type"> int</span> image<span class="operator">,</span><span class="type"> float</span> x<span class="operator">,</span><span class="type"> float</span> y<span class="operator">,</span><span class="type"> float</span> scale<span class="operator">,</span><span class="type"> float</span> opacity<span class="operator">);</span><span class="type">
+void</span> unselect_card<span class="operator">(</span>Card<span class="operator"> *</span>card<span class="operator">);</span><span class="comment">
+/* //////////////////////////////// */
+
+/* /////GAME/////////////////////// */</span><span class="type">
+void</span> update_status<span class="operator">(</span><span class="type">void</span><span class="operator">);</span><span class="type">
+void</span> reset<span class="operator">(</span><span class="type">int</span> type<span class="operator">);</span><span class="type">
+void</span> start_about<span class="operator">();</span><span class="type">
+void</span> change_player<span class="operator">(</span><span class="type">int</span> type<span class="operator">,</span><span class="type"> float</span> x<span class="operator">);</span><span class="type">
+void</span> process_extrem<span class="operator">(</span><span class="type">int</span> type<span class="operator">);</span><span class="comment">
+/* //////////////////////////////// */
+
+/* /////SCENEs///////////////////// */</span>
+Card<span class="operator"> *</span>get_touched_card<span class="operator">(</span><span class="type">float</span> x<span class="operator">,</span><span class="type"> float</span> y<span class="operator">);</span><span class="type">
+void</span> select_card<span class="operator">(</span>Card<span class="operator"> *</span>card<span class="operator">);</span><span class="type">
+void</span> draw_screen<span class="operator">();</span><span class="type">
+void</span> draw_menu<span class="operator">();</span><span class="comment">
+/* //////////////////////////////// */</span><span class="pre">
+
+
+
+#endif // _ENGINE_H_
+</span></pre>
+
+
+</body></html>

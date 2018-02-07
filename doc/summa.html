@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>BME-VIK-MI</title>
+<link href="bme-vik-mi.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+body {
+	background-color: #444;
+}
+</style>
+</head>
+
+<body>
+
+
+
+<div class="content">
+  
+<h1 class="header">.Összegezve</h1>
+<table width="200" border="0">
+  <tr>
+    <td align="center"><strong><a href="#"><img src="../images/download.png" width="128" height="128"></a></strong></td>
+    </tr>
+  <tr>
+    <td align="center"><strong>LETÖLTÉS</strong></td>
+    </tr>
+</table>
+<p><strong><br>
+</strong></p>
+<p>Az eddig leírtakban szerepeltek a fejlesztés során felmerülő problémák, és annak megvalósításának módszerei.<br>
+  Ebbe az összesítésbe csupán a kikommentezett forrásfájlokat tettem bele és a letölthető teljes csomagot.</p>
+<p>A csomag tartalmazza a futtatható állományokat és a projektfájlokat is, valamint a dokumentáció is megtalálható benne.</p>
+<p>&nbsp;</p>
+<p class="main"><strong>A fordítás során használható makrók:</strong></p>
+<ul>
+  <li><strong>_DEBUG</strong> : Belefordítja a fejlesztéshez szükséges ellenörző pontokat. Módunk van megfigyelni a program belső működését közelebbről.</li>
+  <li><strong>SOUND</strong> : Belefordítja a hanghoz szükséges meghívásokat/fügvényeket. Ez azért lett különszedve, mert valamiért a HSZK-s gépeken a hang inicializálás kifagyott.</li>
+  <li><strong>LINUX</strong> : Ha linuxra szeretnénk fordítani a kódot. ( megköveteli a gtk-devel csomagot! )</li>
+  <li><strong>_WIN32</strong>: Windows alatti fordatás.</li>
+  <li><strong>__APPLE__</strong>: Mac OSX támogatás. Ehez szükséges az Xcode SDK teljes telepítése. Használd a fordításhoz a makefilet!<br>
+  </li>
+</ul>
+<p class="header"><strong>Source fájlok:</strong></p>
+<div class="footer">
+  <ul class="nav">
+    <li><a href="1NHF/src/main.html" target="main">main.c</a></li>
+    <li><a href="1NHF/src/Init.html" target="main">Init.c</a></li>
+    <li><a href="1NHF/src/Animation.html" target="main">Animation.c</a></li>
+    <li><a href="1NHF/src/Engine.html" target="main">Engine.c</a></li>
+    <li><a href="1NHF/src/Events.html" target="main">Events.c</a></li>
+    <li><a href="1NHF/src/Renderer.html" target="main">Renderer.c</a></li>
+    <li><a href="1NHF/src/Platform.html" target="main">Platform.c</a></li>
+    <li></li>
+  </ul>
+</div>
+<p>&nbsp;</p>
+<p class="header"><strong>Header fájlok:</strong></p>
+<div class="footer">
+  <ul class="nav">
+    <li><a href="1NHF/src/Platform.h.html" target="main">Platform.h</a></li>
+    <li><a href="1NHF/src/Init.h.html" target="main">Init.h</a></li>
+    <li><a href="1NHF/src/Engine.h.html" target="main">Engine.h</a></li>
+    <li><a href="1NHF/src/Events.h.html" target="main">Events.h</a></li>
+    <li></li>
+  </ul>
+</div>
+<p>&nbsp;</p>
+<p class="main"><strong>Futtatás - bezárás utáni log:</strong></p>
+<p class="source">--------BME-VIK MI 2011_11_5 : 1.NHF [MEMORY - V.0.5]--------<br>
+START GAME<br>
+PASS: ALLEGRO_INIT<br>
+PASS: AUDIO_INIT<br>
+INIT: al_init_acodec_addon<br>
+INIT: al_init_image_addon<br>
+INIT: al_init_font_addon<br>
+PASS: SYSTEM_INIT<br>
+PASS: RENDER_INIT<br>
+PASS: IMAGES_LOAD<br>
+PASS: SOUNDS_LOAD<br>
+PASS: FONT_INIT<br>
+-------------------------------------------------------------<br>
+DESTROY<br>
+exiting...</p>
+
+<p>&nbsp;</p>
+</div>
+
+</body>
+</html>
