@@ -7,7 +7,7 @@
 #*   | | | \ \ ____) | (_) | | | |_ \ V  V / (_| | | |  __/    *
 #*   |_|_|  \_\_____/ \___/|_|  \__| \_/\_/ \__,_|_|  \___|    *
 #*                                                             *
-#*                   http://irsoftware.co.cc                   *
+#*                   http://irsoftware.net                     *
 #*                                                             *
 #*              contact_adress: sk8Geri@gmail.com               *
 #*                                                               *
@@ -24,7 +24,7 @@
 #*                                                              *
 #\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-CC = gcc -Wall -ansi -DLINUX -mmmx `pkg-config --cflags --libs gtk+-2.0 allegro-5`
+CC = gcc -Wall -ansi -mmmx `pkg-config --cflags --libs gtk+-2.0 allegro-5`
 RELEASE = -O2 -ffast-math
 DEBUG = -g -D_DEBUG
 

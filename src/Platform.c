@@ -44,7 +44,7 @@ void InfoMsg(const char *string){
     printf(string);
 }
 
-#elif defined(LINUX)
+#elif defined(__linux__)
 
 /* hack, legutóbb így ment */
 gboolean idle(gpointer data){

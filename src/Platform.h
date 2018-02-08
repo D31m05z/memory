@@ -37,7 +37,7 @@
 
 #if defined(_WIN32)
 //#   include <windows.h>
-#elif defined(LINUX)
+#elif defined(__linux__)
 #   include <stdio.h>
 #   include <gtk/gtk.h>
 #elif defined(__APPLE__)
