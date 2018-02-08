@@ -7,7 +7,7 @@
 *   | | | \ \ ____) | (_) | | | |_ \ V  V / (_| | | |  __/    *
 *   |_|_|  \_\_____/ \___/|_|  \__| \_/\_/ \__,_|_|  \___|    *
 *                                                             *
-*                   http://irsoftware.co.cc                   *
+*                   http://irsoftware.net                     *
 *                                                             *
 *              contact_adress: sk8Geri@gmail.com               *
 *                                                               *
@@ -32,14 +32,14 @@
     * @param img : Az animálni kívánt kép
     * @return következő animció, amit végre kell hajtani
 */
-static Anim *next_animation(Image *img){
-   unsigned i;
+static Anim *next_animation(Image *img) {
+    unsigned i;
 
-   for (i = 0; i < MAX_ANIMS; i++) {
-      if (img->anims[i].value == NULL)
-         return &img->anims[i];
-   }
-   return NULL;
+    for (i = 0; i < MAX_ANIMS; i++) {
+        if (img->anims[i].value == NULL)
+            return &img->anims[i];
+    }
+    return NULL;
 }
 
 /**
@@ -51,26 +51,25 @@ static Anim *next_animation(Image *img){
     * @param s_value : kezdő érték
     * @return nincs
 */
-static void null_all_animations(Image *img, float *value, float s_time,float s_value){
-   unsigned i;
+static void null_all_animations(Image *img, float *value, float s_time, float s_value) {
+    unsigned i;
 
-   for (i = 0; i < MAX_ANIMS; i++) {
-      Anim *anim = &img->anims[i];
+    for (i = 0; i < MAX_ANIMS; i++) {
+        Anim *anim = &img->anims[i];
 
-      if (anim->value != value)
-         continue;
+        if (anim->value != value)
+            continue;
 
-      if (anim->e_time > s_time) {
-         anim->e_time = s_time;
-         anim->e_value = s_value;
-      }
+        if (anim->e_time > s_time) {
+            anim->e_time = s_time;
+            anim->e_value = s_value;
+        }
 
-      if (anim->s_time >= s_time ||
-         anim->s_time >= anim->e_time)
-      {
-         img->anims[i].value = NULL;
-      }
-   }
+        if (anim->s_time >= s_time ||
+            anim->s_time >= anim->e_time) {
+            img->anims[i].value = NULL;
+        }
+    }
 }
 
 /**
@@ -83,20 +82,21 @@ static void null_all_animations(Image *img, float *value, float s_time,float s_v
     * @param duration : mennyi idő alatt történjen meg az animáció
     * @return nincs
 */
-void animation(Image *img, float *value, float e_value, float duration){
-   float s_time = al_get_time() ;
-   Anim *anim;
+void animation(Image *img, float *value, float e_value, float duration) {
+    float s_time = al_get_time();
+    Anim *anim;
 
 
-   null_all_animations(img, value, s_time, *value);
+    null_all_animations(img, value, s_time, *value);
 
-   anim = next_animation(img);
-   anim->value = value;
-   anim->s_value = *value;
-   anim->e_value = e_value;
-   anim->s_time = s_time;
-   anim->e_time = s_time + duration;
+    anim = next_animation(img);
+    anim->value = value;
+    anim->s_value = *value;
+    anim->e_value = e_value;
+    anim->s_time = s_time;
+    anim->e_time = s_time + duration;
 }
+
 /**
     * animation_color : szinek animálásáért felelős fv.
     * @param img  : animálni kívánt kép
@@ -104,14 +104,14 @@ void animation(Image *img, float *value, float e_value, float duration){
     * @param duration : mennyi idő alatt történjen meg az animáció
     * @return nincs
 */
-void animation_color(Image *img, const ALLEGRO_COLOR color, float duration){
-   float r, g, b;
+void animation_color(Image *img, const ALLEGRO_COLOR color, float duration) {
+    float r, g, b;
 
-   al_unmap_rgb_f(color, &r, &g, &b);
+    al_unmap_rgb_f(color, &r, &g, &b);
 
-   animation(img, &img->r, r,duration);
-   animation(img, &img->g, g,duration);
-   animation(img, &img->b, b,duration);
+    animation(img, &img->r, r, duration);
+    animation(img, &img->g, g, duration);
+    animation(img, &img->b, b, duration);
 }
 
 /**
@@ -120,26 +120,26 @@ void animation_color(Image *img, const ALLEGRO_COLOR color, float duration){
     * @param now : aktuális idő, kell hogy meg tudjuk állapítani mennyi idő telt el!
     * @return nincs
 */
-static void update_anim(Anim *anim, float now){
-   float dt, t, range;
+static void update_anim(Anim *anim, float now) {
+    float dt, t, range;
 
-   if (!anim->value)
-      return;
+    if (!anim->value)
+        return;
 
-   if (now < anim->s_time)
-      return;
+    if (now < anim->s_time)
+        return;
 
-   dt = now - anim->s_time;
-   t = dt / (anim->e_time - anim->s_time);
+    dt = now - anim->s_time;
+    t = dt / (anim->e_time - anim->s_time);
 
-   if (t >= 1.0) {
-      *anim->value = anim->e_value;
-      anim->value = NULL;
-      return;
-   }
+    if (t >= 1.0) {
+        *anim->value = anim->e_value;
+        anim->value = NULL;
+        return;
+    }
 
-   range = anim->e_value - anim->s_value;
-   *anim->value = anim->s_value + -t*(t-2) * range;
+    range = anim->e_value - anim->s_value;
+    *anim->value = anim->s_value + -t * (t - 2) * range;
 }
 
 /**
@@ -148,11 +148,11 @@ static void update_anim(Anim *anim, float now){
     * @param now : aktuális idő, kell hogy meg tudjuk állapítani mennyi idő telt el!
     * @return nincs
 */
-static void update_image_anims(Image *img, float now){
-   int i;
+static void update_image_anims(Image *img, float now) {
+    int i;
 
-   for (i = 0; i < MAX_ANIMS; i++)
-      update_anim(&img->anims[i], now);
+    for (i = 0; i < MAX_ANIMS; i++)
+        update_anim(&img->anims[i], now);
 }
 
 /**
@@ -162,9 +162,9 @@ static void update_image_anims(Image *img, float now){
     * @param now : aktuális idő, kell hogy meg tudjuk állapítani mennyi idő telt el!
     * @return nincs
 */
-static void update_card_anims(Card *card, float now){
-   update_image_anims(&card->back, now);
-   update_image_anims(&card->front, now);
+static void update_card_anims(Card *card, float now) {
+    update_image_anims(&card->back, now);
+    update_image_anims(&card->front, now);
 }
 
 /**
@@ -174,22 +174,22 @@ static void update_card_anims(Card *card, float now){
     * @param now : aktuális idő, kell hogy meg tudjuk állapítani mennyi idő telt el!
     * @return nincs
 */
-void animation_updates(float now){
-   int i;
+void animation_updates(float now) {
+    int i;
 
 /* --- cards --- */
 
-   for (i = 0; i < NUM_CELLS; i++)
-      update_card_anims(&i_cards[i], now);
+    for (i = 0; i < NUM_CELLS; i++)
+        update_card_anims(&i_cards[i], now);
 
 /* --- game --- */
 
-   update_image_anims(&i_glow, now);
-   update_image_anims(&i_glow_overlay, now);
+    update_image_anims(&i_glow, now);
+    update_image_anims(&i_glow_overlay, now);
 
 /* --- menu --- */
 
-   update_image_anims(&i_title_game,now);
-   update_image_anims(&i_title_logo,now);
-   update_image_anims(&i_logo_overlay,now);
+    update_image_anims(&i_title_game, now);
+    update_image_anims(&i_title_logo, now);
+    update_image_anims(&i_logo_overlay, now);
 }

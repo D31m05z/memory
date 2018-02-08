@@ -7,7 +7,7 @@
 *   | | | \ \ ____) | (_) | | | |_ \ V  V / (_| | | |  __/    *
 *   |_|_|  \_\_____/ \___/|_|  \__| \_/\_/ \__,_|_|  \___|    *
 *                                                             *
-*                   http://irsoftware.co.cc                   *
+*                   http://irsoftware.net                     *
 *                                                             *
 *              contact_adress: sk8Geri@gmail.com               *
 *                                                               *
@@ -30,7 +30,9 @@
 #include "Platform.h"
 
 void on_mouse_axes(float x, float y);
+
 void on_mouse_down(float x, float y, int mbut);
+
 void unselect_all_cards(void);
 
 #endif // _EVENTS_H_

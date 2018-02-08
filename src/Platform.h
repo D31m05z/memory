@@ -7,7 +7,7 @@
 *   | | | \ \ ____) | (_) | | | |_ \ V  V / (_| | | |  __/    *
 *   |_|_|  \_\_____/ \___/|_|  \__| \_/\_/ \__,_|_|  \___|    *
 *                                                             *
-*                   http://irsoftware.co.cc                   *
+*                   http://irsoftware.net                     *
 *                                                             *
 *              contact_adress: sk8Geri@gmail.com               *
 *                                                               *
@@ -47,11 +47,12 @@
 #endif
 
 
-
 #define GAME_PATH "../base/"
 #define MAX_ANIMS 10
 
-enum {SUCCES,FAIL};
+enum {
+    SUCCES, FAIL
+};
 
 /*
 typedef unsigned char uint8;
@@ -82,12 +83,15 @@ typedef unsigned int uint;
 
 /*- HSZK-s gépeken szedd ki!!-- */
 #define SOUND
+
 /* ---------------------------- */
 
 
 
 void ErrorMsg(const char *string);
+
 void WarningMsg(const char *string);
+
 void InfoMsg(const char *string);
 
 

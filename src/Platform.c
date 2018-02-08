@@ -7,7 +7,7 @@
 *   | | | \ \ ____) | (_) | | | |_ \ V  V / (_| | | |  __/    *
 *   |_|_|  \_\_____/ \___/|_|  \__| \_/\_/ \__,_|_|  \___|    *
 *                                                             *
-*                   http://irsoftware.co.cc                   *
+*                   http://irsoftware.net                     *
 *                                                             *
 *              contact_adress: sk8Geri@gmail.com               *
 *                                                               *
@@ -29,81 +29,81 @@
 #if defined(_WIN32)
 
 void ErrorMsg(const char *string){
-	MessageBoxA(NULL, string, "Error", MB_OK | MB_ICONERROR);
-	printf("LOG: %s",string);
+    MessageBoxA(NULL, string, "Error", MB_OK | MB_ICONERROR);
+    printf("LOG: %s",string);
 }
 
 void WarningMsg(const char *string){
-	MessageBoxA(NULL, string, "Warning", MB_OK | MB_ICONWARNING);
+    MessageBoxA(NULL, string, "Warning", MB_OK | MB_ICONWARNING);
 }
 
 void InfoMsg(const char *string){
 #ifdef DEBUG
-	MessageBoxA(NULL, string, "Information", MB_OK | MB_ICONINFORMATION);
+    MessageBoxA(NULL, string, "Information", MB_OK | MB_ICONINFORMATION);
 #endif
-	printf(string);
+    printf(string);
 }
 
 #elif defined(LINUX)
 
 /* hack, legutóbb így ment */
 gboolean idle(gpointer data){
-	gtk_main_quit();
-	return FALSE;
+    gtk_main_quit();
+    return FALSE;
 }
 
 void MessageBox(const char *string, const GtkMessageType msgType){
-	GtkWidget *dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_DESTROY_WITH_PARENT, msgType, GTK_BUTTONS_OK, string);
-	gtk_dialog_run(GTK_DIALOG(dialog));
-	gtk_widget_destroy(dialog);
-	g_idle_add(idle, NULL);
-	gtk_main();
+    GtkWidget *dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_DESTROY_WITH_PARENT, msgType, GTK_BUTTONS_OK, string);
+    gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
+    g_idle_add(idle, NULL);
+    gtk_main();
 }
 
 void ErrorMsg(const char *string){
-	MessageBox(string, GTK_MESSAGE_ERROR);
-	printf("LOG: %s",string);
+    MessageBox(string, GTK_MESSAGE_ERROR);
+    printf("LOG: %s",string);
 }
 
 void WarningMsg(const char *string){
-	MessageBox(string, GTK_MESSAGE_WARNING);
+    MessageBox(string, GTK_MESSAGE_WARNING);
 }
 
 void InfoMsg(const char *string){
 #ifdef DEBUG
      MessageBox(string, GTK_MESSAGE_INFO);
 #endif
-	printf(string);
+    printf(string);
 }
 
 #elif defined(__APPLE__)
 
 void ErrorMsg(const char *string){
-	Str255 msg;
-	c2pstrcpy(msg, string);
+    Str255 msg;
+    c2pstrcpy(msg, string);
 
-	SInt16 ret;
-	StandardAlert(kAlertStopAlert, msg, NULL, NULL, &ret);
+    SInt16 ret;
+    StandardAlert(kAlertStopAlert, msg, NULL, NULL, &ret);
     printf("LOG: %s",string);
 }
 
 void WarningMsg(const char *string){
-	Str255 msg;
-	c2pstrcpy(msg, string);
+    Str255 msg;
+    c2pstrcpy(msg, string);
 
-	SInt16 ret;
-	StandardAlert(kAlertCautionAlert, msg, NULL, NULL, &ret);
+    SInt16 ret;
+    StandardAlert(kAlertCautionAlert, msg, NULL, NULL, &ret);
 }
 
 void InfoMsg(const char *string){
-	Str255 msg;
-	c2pstrcpy(msg, string);
+    Str255 msg;
+    c2pstrcpy(msg, string);
 
 #ifdef DEBUG
-	SInt16 ret;
-	StandardAlert(kAlertNoteAlert, msg, NULL, NULL, &ret);
+    SInt16 ret;
+    StandardAlert(kAlertNoteAlert, msg, NULL, NULL, &ret);
 #endif
-	printf(string);
+    printf(string);
 }
 
 #endif

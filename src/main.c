@@ -7,7 +7,7 @@
 *   | | | \ \ ____) | (_) | | | |_ \ V  V / (_| | | |  __/    *
 *   |_|_|  \_\_____/ \___/|_|  \__| \_/\_/ \__,_|_|  \___|    *
 *                                                             *
-*                   http://irsoftware.co.cc                   *
+*                   http://irsoftware.net                     *
 *                                                             *
 *              contact_adress: sk8Geri@gmail.com               *
 *                                                               *
@@ -31,75 +31,73 @@
 #include "Engine.h"
 
 
-
 /**
     * main_loop : Egér mozgatás. Kártya effekt...
     * @param queue  : Az allegro eseménykezelő pointere
     * @return nincs
 */
-static void main_loop(ALLEGRO_EVENT_QUEUE *queue){
-   ALLEGRO_EVENT event;
+static void main_loop(ALLEGRO_EVENT_QUEUE *queue) {
+    ALLEGRO_EVENT event;
 
-   bool redraw = true;
-   bool done = false;
+    bool redraw = true;
+    bool done = false;
 
-   for (;;) {
+    for (;;) {
 
-      if (redraw ) {
-         i_time = al_get_time();
-         animation_updates(i_time);
+        if (redraw) {
+            i_time = al_get_time();
+            animation_updates(i_time);
 
-         if(i_game_status == GAME){
-             draw_screen();
-             update_status();
-         }else if(i_game_status == MENU){
-             draw_menu();
-         }
-         redraw = false;
-      }
+            if (i_game_status == GAME) {
+                draw_screen();
+                update_status();
+            } else if (i_game_status == MENU) {
+                draw_menu();
+            }
+            redraw = false;
+        }
 
-      al_wait_for_event(queue, &event);
+        al_wait_for_event(queue, &event);
 
-      if (event.timer.source == i_refresh_timer) {
-         redraw = true;
-         continue;
-      }
+        if (event.timer.source == i_refresh_timer) {
+            redraw = true;
+            continue;
+        }
 
-        switch(event.type){
+        switch (event.type) {
             case ALLEGRO_EVENT_MOUSE_AXES:
-                 if(i_game_status == GAME)on_mouse_axes(event.mouse.x, event.mouse.y);
-                 continue;
+                if (i_game_status == GAME)on_mouse_axes(event.mouse.x, event.mouse.y);
+                continue;
             case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
-                 if(i_front_count<2 && i_game_status==GAME && !i_halal && !i_sziv)
-                 on_mouse_down(event.mouse.x, event.mouse.y, event.mouse.button);
-                 continue;
+                if (i_front_count < 2 && i_game_status == GAME && !i_halal && !i_sziv)
+                    on_mouse_down(event.mouse.x, event.mouse.y, event.mouse.button);
+                continue;
             case ALLEGRO_EVENT_DISPLAY_CLOSE:
-                 done = true;
-                 break;
+                done = true;
+                break;
             case ALLEGRO_EVENT_KEY_DOWN:
-                 if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
-                     if(i_game_status == GAME){
-                         i_game_status = MENU;
-                         start_about();
-                     }else if(i_game_status == MENU)
+                if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
+                    if (i_game_status == GAME) {
+                        i_game_status = MENU;
+                        start_about();
+                    } else if (i_game_status == MENU)
                         done = true;
-                        break;
-                 }else if (event.keyboard.keycode == ALLEGRO_KEY_N){
-                   if(i_found== (i_game_type? 7: 8))
+                    break;
+                } else if (event.keyboard.keycode == ALLEGRO_KEY_N) {
+                    if (i_found == (i_game_type ? 7 : 8))
                         reset(i_game_type);
-                }else if (event.keyboard.keycode == ALLEGRO_KEY_M){
-                    if(i_game_status == MENU) i_game_type = !i_game_type;
-                }else if (event.keyboard.keycode == ALLEGRO_KEY_ENTER){
-                   if(i_game_status == MENU){
-                    i_game_status = GAME;
+                } else if (event.keyboard.keycode == ALLEGRO_KEY_M) {
+                    if (i_game_status == MENU) i_game_type = !i_game_type;
+                } else if (event.keyboard.keycode == ALLEGRO_KEY_ENTER) {
+                    if (i_game_status == MENU) {
+                        i_game_status = GAME;
                         reset(i_game_type);
                     }
                 }
         }
-      if(done)break;
-   }
+        if (done)break;
+    }
 }
-
 
 
 /**
@@ -108,57 +106,62 @@ static void main_loop(ALLEGRO_EVENT_QUEUE *queue){
     * @param argv  : Paramétereket tartalamzó karaktertömb pointerek
     * @return nincs
 */
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[]) {
 
     i_game_status = MENU;
 
-printf("--------BME-VIK MI 2011_11_5 : 1.NHF [MEMORY - V.0.5]--------\n");
-printf("START GAME\n");
+    printf("--------BME-VIK MI 2011_11_5 : 1.NHF [MEMORY - V.0.5]--------\n");
+    printf("START GAME\n");
 
 
-    if((init_system()) == FAIL){
+    if ((init_system()) == FAIL) {
         ErrorMsg("error: init_system\n");
         exit(-1);
-    }InfoMsg("PASS: SYSTEM_INIT\n");
+    }
+    InfoMsg("PASS: SYSTEM_INIT\n");
 
-    if((init_render()) == FAIL){
+    if ((init_render()) == FAIL) {
         ErrorMsg("error: init_render\n");
         exit(-1);
-    }InfoMsg("PASS: RENDER_INIT\n");
+    }
+    InfoMsg("PASS: RENDER_INIT\n");
 
-    if((load_images()) == FAIL){
+    if ((load_images()) == FAIL) {
         ErrorMsg("error: load_images\n");
         exit(-1);
-    }InfoMsg("PASS: IMAGES_LOAD\n");
+    }
+    InfoMsg("PASS: IMAGES_LOAD\n");
 
 #ifdef SOUND
-    if((load_sounds()) == FAIL){
+    if ((load_sounds()) == FAIL) {
         ErrorMsg("error: load_sounds\n");
         exit(-1);
-    }InfoMsg("PASS: SOUNDS_LOAD\n");
+    }
+    InfoMsg("PASS: SOUNDS_LOAD\n");
 #endif
 
-    if((init_glow()) == FAIL){
+    if ((init_glow()) == FAIL) {
         ErrorMsg("error: init_glow\n");
         exit(-1);
     }
 
-    if((init_menu()) == FAIL){
+    if ((init_menu()) == FAIL) {
         ErrorMsg("error: init_menu\n");
         exit(-1);
     }
 
-    if((init_font()) == FAIL){
+    if ((init_font()) == FAIL) {
         ErrorMsg("error: init_font\n");
         exit(-1);
-    }InfoMsg("PASS: FONT_INIT\n");
+    }
+    InfoMsg("PASS: FONT_INIT\n");
 
-    if(argc>2){
-        i_players[0].name=argv[1];
-        i_players[1].name=argv[2];
-    }else {
-        i_players[0].name="Player1";
-        i_players[1].name="Player2";
+    if (argc > 2) {
+        i_players[0].name = argv[1];
+        i_players[1].name = argv[2];
+    } else {
+        i_players[0].name = "Player1";
+        i_players[1].name = "Player2";
     }
 
     start_about();
@@ -176,12 +179,12 @@ printf("START GAME\n");
 
     al_start_timer(i_refresh_timer);
 
-InfoMsg("-------------------------------------------------------------\n");
+    InfoMsg("-------------------------------------------------------------\n");
     main_loop(i_queue);
 
-InfoMsg("DESTROY\n");
+    InfoMsg("DESTROY\n");
     al_destroy_font(i_font);
-InfoMsg("exiting...\n");
+    InfoMsg("exiting...\n");
 
-   return 0;
+    return 0;
 }

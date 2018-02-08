@@ -7,7 +7,7 @@
 *   | | | \ \ ____) | (_) | | | |_ \ V  V / (_| | | |  __/    *
 *   |_|_|  \_\_____/ \___/|_|  \__| \_/\_/ \__,_|_|  \___|    *
 *                                                             *
-*                   http://irsoftware.co.cc                   *
+*                   http://irsoftware.net                     *
 *                                                             *
 *              contact_adress: sk8Geri@gmail.com               *
 *                                                               *
@@ -30,23 +30,23 @@
 #include "Platform.h"
 
 enum {
-   IMG_1,
-   IMG_2,
-   IMG_3,
-   IMG_4,
-   IMG_5,
-   IMG_6,
-   IMG_7,
-   IMG_8,
-   IMG_SZIV,
-   IMG_HALAL,
-   IMG_BACK,
-   IMG_GLOW,
-   IMG_GLOW_OVERLAY,
-   IMG_TITLE_GAME,
-   IMG_TITLE_LOGO,
-   IMG_LOGO,
-   IMG_NUM
+    IMG_1,
+    IMG_2,
+    IMG_3,
+    IMG_4,
+    IMG_5,
+    IMG_6,
+    IMG_7,
+    IMG_8,
+    IMG_SZIV,
+    IMG_HALAL,
+    IMG_BACK,
+    IMG_GLOW,
+    IMG_GLOW_OVERLAY,
+    IMG_TITLE_GAME,
+    IMG_TITLE_LOGO,
+    IMG_LOGO,
+    IMG_NUM
 };
 
 enum {
@@ -58,18 +58,24 @@ enum {
 };
 
 int init_system();
+
 int init_render();
+
 int init_cards(int type);
+
 int init_glow();
+
 int init_menu();
+
 int init_font();
+
 int load_sounds();
+
 int load_images();
 
-ALLEGRO_FONT   *i_font;
+ALLEGRO_FONT *i_font;
 ALLEGRO_BITMAP *i_images[IMG_NUM];
 ALLEGRO_SAMPLE *i_sounds[NUM_SOUNDS];
-
 
 
 #endif // _INIT_H_
