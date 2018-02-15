@@ -31,7 +31,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 find_package(PkgConfig REQUIRED)
 
-pkg_check_modules (GTK2 REQUIRED gtk+-2.0)
+pkg_check_modules(GTK2 REQUIRED gtk+-2.0)
 pkg_search_module(ALLEGRO REQUIRED allegro-5 allegro-5.2)
 pkg_search_module(ALLEGRO_IMAGE REQUIRED allegro_image-5 allegro_image-5.2)
 pkg_search_module(ALLEGRO_AUDIO REQUIRED allegro_audio-5 allegro_audio-5.2)
@@ -39,7 +39,7 @@ pkg_search_module(ALLEGRO_ACODEC REQUIRED allegro_acodec-5 allegro_acodec-5.2)
 pkg_search_module(ALLEGRO_DIALOG REQUIRED allegro_dialog-5 allegro_dialog-5.2)
 pkg_search_module(ALLEGRO_FONT REQUIRED allegro_font-5 allegro_font-5.2)
 
-add_executable(memory
+add_executable(${PROJECT_NAME}
         src/Animation.c
         src/Engine.c
         src/Engine.h
@@ -51,6 +51,15 @@ add_executable(memory
         src/Platform.c
         src/Platform.h
         src/Renderer.c)
+
+if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+    target_compile_options(${PROJECT_NAME} PRIVATE "-Wall")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
+endif()
+
+if(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE "/W4 /WX /w14244")
+endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${ALLEGRO_INCLUDE_DIRS} ${GTK2_INCLUDE_DIRS})
 
